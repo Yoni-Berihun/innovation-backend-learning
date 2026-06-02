@@ -101,46 +101,38 @@ Topics may include:
 
 # 📂 Required Folder Structure
 
-Backend Folder
-│
-├── 01-JavaScript-Fundamentals
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 02-NodeJS-Fundamentals
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 03-ExpressJS
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 04-REST-APIs
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 05-Authentication
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 06-Database-Integration
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 07-Testing
-│ ├── README.md
-│ └── Exercises.md
-│
-├── 08-Deployment
-│ ├── README.md
-│ └── Exercises.md
-│
-├── Projects
-│ ├── Beginner
-│ ├── Intermediate
-│ └── Advanced
-│
-└── Resources
+```
+Backend/
+├── 01-JavaScript-Fundamentals/
+│   ├── README.md
+│   └── Exercises.md
+├── 02-NodeJS-Fundamentals/
+│   ├── README.md
+│   └── Exercises.md
+├── 03-ExpressJS/
+│   ├── README.md
+│   └── Exercises.md
+├── 04-REST-APIs/
+│   ├── README.md
+│   └── Exercises.md
+├── 05-Authentication/
+│   ├── README.md
+│   └── Exercises.md
+├── 06-Database-Integration/
+│   ├── README.md
+│   └── Exercises.md
+├── 07-Testing/
+│   ├── README.md
+│   └── Exercises.md
+├── 08-Deployment/
+│   ├── README.md
+│   └── Exercises.md
+├── Projects/
+│   ├── Beginner/
+│   ├── Intermediate/
+│   └── Advanced/
+└── Resources/
+```
 
 ---
 
