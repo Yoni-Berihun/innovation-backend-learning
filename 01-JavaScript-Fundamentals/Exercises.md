@@ -5,6 +5,8 @@
 > - Only check the answer after you've given it a real attempt
 > - Read the explanation carefully even if you got it right — the *why* matters more than the *what*
 > - Prefer the interactive version at `exercises-toggle.html` to show/hide answers with a button
+> - Use `run-js-snippet.html` to paste a code block and execute only the JS snippet from the note
+> - For Node snippets, choose Node mode in the runner and download a runnable `.js` file
 
 ---
 
