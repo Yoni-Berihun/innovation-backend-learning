@@ -1,613 +1,680 @@
-# 🟨 Module 01 — JavaScript Fundamentals
+What is JavaScript? A Definition of the JS Programming Language
 
-> 👋 **Hey there, future backend developer!**
-> Before we build servers, APIs, or databases — we need to master the language that powers it all: **JavaScript**.
-> This module is your complete foundation. Take it section by section, try every code example, and don't skip the exercises. You'll be glad you didn't. 💪
+JavaScript is a dynamic programming language that's used for web development, in web applications, for game development, and lots more. It allows you to implement dynamic features on web pages that cannot be done with only HTML and CSS.
 
----
+Many browsers use JavaScript as a scripting language for doing dynamic things on the web. Any time you see a click-to-show dropdown menu, extra content added to a page, and dynamically changing element colors on a page, to name a few features, you're seeing the effects of JavaScript.
 
-## 📖 Table of Contents
+How JavaScript Makes Things Dynamic
+HTML defines the structure of your web document and the content therein. CSS declares various styles for the contents provided on the web document.
 
-1. [What is JavaScript?](#1--what-is-javascript)
-2. [How JavaScript Works in HTML](#2--how-javascript-works-in-html)
-3. [Variables & Data Types](#3--variables--data-types)
-4. [Operators](#4--operators)
-5. [Control Flow](#5--control-flow)
-6. [Functions](#6--functions)
-7. [Arrays & Objects](#7--arrays--objects)
-8. [ES6+ Features](#8--es6-features)
-9. [Asynchronous JavaScript](#9--asynchronous-javascript)
-10. [Promises](#10--promises)
-11. [Async / Await](#11--async--await)
-12. [Learning Resources](#12--learning-resources)
-13. [Quick Knowledge Check](#13--quick-knowledge-check)
+HTML and CSS are often called markup languages rather than programming languages, because they, at their core, provide markups for documents with very little dynamism.
 
----
+JavaScript, on the other hand, is a dynamic programming language that supports Math calculations, allows you to dynamically add HTML contents to the DOM, creates dynamic style declarations, fetches contents from another website, and lots more.
 
-## 1 — What is JavaScript?
 
-Think of building a house 🏠:
-- **HTML** is the structure — walls, floors, and rooms.
-- **CSS** is the interior design — colors, fonts, and layout.
-- **JavaScript** is the electricity ⚡ — it makes everything *work*. Lights turn on, doors open, the doorbell rings.
+What can a JavaScript Do ?
+ JavaScript gives HTML designers a programming tool - HTML authors are normally not 
+programmers, but JavaScript is a scripting language with a very simple syntax! Almost anyone can 
+put small "snippets" of code into their HTML pages 
+ JavaScript can put dynamic text into an HTML page - A JavaScript statement like this: 
+document.write("<h1>" + name + "</h1>") can write a variable text into an HTML page 
+ JavaScript can react to events - A JavaScript can be set to execute when something happens, 
+like when a page has finished loading or when a user clicks on an HTML element 
+ JavaScript can read and write HTML elements - A JavaScript can read and change the content 
+of an HTML element 
+ JavaScript can be used to validate data - A JavaScript can be used to validate form data before 
+it is submitted to a server. This saves the server from extra processing 
+ JavaScript can be used to detect the visitor's browser - A JavaScript can be used to detect the 
+visitor's browser, and - depending on the browser - load another page specifically designed for that 
+browser 
 
-JavaScript is a **dynamic programming language** that brings web pages to life. Any time you see a click-to-show dropdown menu, content added to a page without refreshing, or colors changing on hover — you're seeing JavaScript in action.
+  JavaScript can be used to create cookies - A JavaScript can be used to store and retrieve 
+information on the visitor's computer.
 
-### 🤔 But wait — isn't JavaScript just for websites?
+How to Use JavaScript in HTML
+Just like with CSS, JavaScript can be used in HTML in various ways, such as:
 
-Not anymore! JavaScript now runs:
-- In the **browser** (frontend)
-- On the **server** (Node.js — that's what this whole course is about!)
-- In **mobile apps** (React Native)
-- In **desktop apps** (Electron)
-- Even on **IoT devices**
+1. Inline JavaScript
+Here, you have the JavaScript code in HTML tags in some special JS-based attributes.
 
-> 💡 **Fun Fact:** JavaScript was created in just **10 days** in 1995 by Brendan Eich at Netscape. Today it's the most used programming language in the world for 11 years running (Stack Overflow Survey).
+For example, HTML tags have event attributes that allow you to execute some code inline when an event is triggered. Here's what I mean:
 
----
-
-### What Can JavaScript Do?
-
-| Capability | Real Example |
-|---|---|
-| 🖊️ Write dynamic content | Generate a user's profile page from data |
-| 🎯 React to events | Run a function when a button is clicked |
-| 📖 Read & modify HTML | Change a heading's text after login |
-| ✅ Validate data | Check that a form email is valid before sending |
-| 🍪 Store information | Save a user's theme preference locally |
-| 🌐 Communicate with servers | Fetch posts from a database API |
-| 🖥️ Run on the server | Handle HTTP requests with Node.js |
-
----
-
-### How JavaScript Makes Things Dynamic
-
-HTML and CSS are often called **markup languages** rather than programming languages. They define structure and style, but they have very little dynamism on their own.
-
-JavaScript, on the other hand:
-- Supports **math calculations**
-- Dynamically **adds/removes HTML** from the DOM
-- **Creates and changes styles** on the fly
-- **Fetches content** from other servers
-- Handles **user interaction** in real time
-
----
-
-## 2 — How JavaScript Works in HTML
-
-There are **three ways** to add JavaScript to a webpage. Think of them like three ways to play music in a room:
-
-### 🎵 Method 1: Inline JavaScript
-
-The JS code lives directly inside an HTML tag attribute:
-
-```html
 <button onclick="alert('You just clicked a button')">Click me!</button>
-```
+This is an example of inline JavaScript. The value of onclick can be some Match calculation, a dynamic addition to the DOM – any syntax-valid JavaScript code.
 
-Quick for tiny things, but gets messy fast. **Avoid for real projects.**
+2. Internal JavaScript, with the script tag
+Just like the style tag for style declarations within an HTML page, the script tag exists for JavaScript. Here's how it's used:
 
----
-
-### 🔊 Method 2: Internal JavaScript (using `<script>` tag)
-
-The JS lives inside the HTML file in its own `<script>` block:
-
-```html
 <script>
-  function greet() {
-    alert("I am inside a script tag");
-  }
+    function(){
+        alert("I am inside a script tag")
+    }
 </script>
-```
+3. External JavaScript
+You may want to have your JavaScript code in a different file. External JavaScript allows this. For such uses-cases, here's how it's done:
 
-Better for small projects, but still mixes HTML and JS in one file.
-
----
-
-### 🎙️ Method 3: External JavaScript (separate `.js` file)
-
-```html
 <!-- index.html -->
 <script src="./script.js"></script>
-```
-
-```js
 // script.js
 alert("I am inside an external file");
-```
+The src attribute of the script tag allows you to apply a source for the JavaScript code. That reference is important because it notifies the browser to also fetch the content of script.js.
 
-The `src` attribute tells the browser to also load `script.js`. The `.js` extension is the JavaScript file extension, just like `.html` for HTML.
+script.js can be in the same directory with index.html, or it can be gotten from another website. For the latter, you'll need to pass the full URL (https://.../script.js).
 
-> ✅ **Best Practice:** Always use **external JavaScript** for real projects. It keeps your HTML clean, your JS reusable, and your codebase organized.
+Notice the .js extension? That's the extension for JavaScript files, just like HTML has .html.
 
----
+Now that we've looked at ways to apply JavaScript to our HTML, let's look at some of the features of JavaScript.
 
-## 3 — Variables & Data Types
+What is a Variable? Example #1
+When a child is born, they are given a name and throughout their life, they'll be referred to by that name (unless the name gets changed at some point).
 
-### 🧠 What is a Variable?
+Have you seen anyone without a name? How were you able to call them?
+In an ideal world, everyone should have a name or a unique way we can refer to them. In JavaScript, every variable has a name.
 
-> **Analogy #1 — The Name:** When a child is born, they are given a name. Throughout their life, when you say that name, you're referring to that specific person. Variables work the same way — a name that refers to a value.
+Everyone must have a name or a way by which we can refer to them.
 
-> **Analogy #2 — Math:** When we say `x = 1`, it means "anywhere you see x, replace it with 1". The variable `x` *points to* the value `1`.
+What is a Variable? Example #2
+In a math equation, when we say x = 1 it means, "anywhere you see x, you should replace it with 1". In this case, x is a variable, while 1 is the value of it. That is: x points to 1.
 
-> **Analogy #3 — A Container:** A variable is like a labeled box. The variable **name** is the label, the **value** is what's inside, and the **type** is the kind of thing inside.
+This means that without x, there will be no reference to 1. There could be other occurrences of 1 in the equation but those will be different than the 1 which x was referring to. For example:
 
-```js
-/* The code below means x is 1
- * So during execution, anywhere x appears after this line,
- * the compiler replaces x with 1.
+/* The code below means x is 1 
+ * So during execution, anywhere x appears after the line below, 
+ * the complier replace x with 1.
  */
 let x = 1;
-let y = 1; // y also refers to 1, but it's a DIFFERENT 1 from x's
-console.log(x); // 1
-```
+let y = 1; // the value which y refers to is different from that of x
+console.log(x); // This line will log 1 to the console.
+In the code snippet above, x refers to the value 1, and y It also refers to another value 1, but note that both values are distinct, just like you can have two different brands of bottled water even though they both contain water.
 
----
+So, when we mention the variable name x, we get the value assigned to that variable.
 
-### How to Declare, Assign & Initialize
+What is a Variable? Example #3
+A variable can be conceptualized as a container. The variable's name serves as its identifier, its value represents the container's contents, and its type specifies the nature of those contents.
+In JavaScript, values are assigned a name and anytime we need that value, we simply mention the name to which it was assigned. When the code executes, the name of that variable is replaced by the value it refers to.
 
-```js
-let score;       // Declaration — creates an empty container
-score = 10;      // Assignment — puts a value in it
-let age = 20;    // Initialization — declaration + assignment at once
-```
+// Add the line of code below to the previous code snippet to
+// find out the data type of x;
+console.log(typeof x)
 
-- **Declaring** = buying a box 📦
-- **Assigning** = putting something in the box
-- **Initializing** = buying a box that already has something in it
+In the code snippet above, number is printed to the console because variable x holds the value 1 which is a number.
 
----
+Variables exist in our program to help us hold values and be able to refer to them whenever we need to. Anywhere a variable is mentioned, the value of that variable is what's being used for the computation at the time.
 
-### The Three Keywords: `let`, `const`, `var`
+How to Declare a Variable
+let score;
+The program above declares/creates a variable called score.
 
-| Keyword | Reassignable? | Scope | Use When |
-|---|---|---|---|
-| `let` | ✅ Yes | Block `{}` | Value will change over time |
-| `const` | ❌ No | Block `{}` | Value never changes |
-| `var` | ✅ Yes | Function | Legacy code only — avoid! |
+In JavaScript, creating variables is that simple. The type of the variable is the type of the value stored in it. That is, if the variable score holds a value of 1, the type for the score variable is number. So we can say, score is a number variable.
 
-```js
-let username = "Alex";    // Can be reassigned
-const PI = 3.14159;       // Can NEVER be changed
-username = "Jordan";      // ✅ Works
-PI = 3;                   // ❌ TypeError: Assignment to constant variable
-```
+To create a variable, we have to do the following;
 
-> 💡 **Rule of Thumb:** Start with `const`. If you later realize the value needs to change, switch to `let`. Never use `var` in modern code.
+Declare the variable using one of these keywords: let, const or var.
 
----
+Determine a name to call the variable and write it on the same line as the keyword used in step 1.
 
-### How to Call a Variable
+let score; // creates variable 'score'
+Notice that this time, we did not give it a value. We just simply created a container that will store something. For now, it is empty. Although it has no content at the moment, we'll surely provide content for it.
 
-To use a variable, simply mention its name. During execution, the name is replaced with its value:
+Variable Assignment and Initialization
+We can assign a value to a variable by using the assignment (=) operator—the variable name to the left of it, and the value to the right.
 
-```js
-let score = 10;
-console.log(score + 1); // 11 → score is replaced by 10, so: 10 + 1 = 11
-```
+score = 1;
+The code snipped above assigns 1 as the value of score (this is called variable assignment).
 
----
+When we combine variable declaration and assignment in one operation, it is called variable initialization.
 
-### How to Name Variables
+let score = 1;
+As seen above, we declare the variable score, and immediately on the same line, assign the value 1 to it.
 
-**Rules (required):**
-- Cannot start with a number: ❌ `1score` → ✅ `score1`
-- No spaces allowed: ❌ `my score` → ✅ `myScore`
-- Cannot use reserved words like `let`, `if`, `return`, `class`, `function`
-- Case-sensitive: `score` and `Score` are **different** variables
+This means that we provided an initial value for the variable when it was created.
 
-**Reserved Words** (you don't need to memorize these — just know they exist):
-> `arguments` `await` `break` `case` `catch` `class` `const` `continue` `debugger` `default` `delete` `do` `else` `enum` `eval` `export` `extends` `false` `finally` `for` `function` `if` `implements` `import` `in` `Infinity` `instanceof` `interface` `let` `NaN` `new` `null` `package` `private` `protected` `public` `return` `static` `super` `switch` `this` `throw` `true` `try` `typeof` `undefined` `var` `void` `while` `with` `yield`
+How to Call a Variable
+If you want to use a variable for an operation at any time in your program, you can simply just "call" it. To call a variable is the same as mentioning or using it.
 
-**Naming Conventions (best practices):**
+console.log(score + 1) // 2
+In the code snippet above, the variable score was used in the line of code. Therefore, It will be replaced with its actual value 1 during the code execution. This means we'd have 1 + 1 executed, resulting in 2.
 
-```js
-let firstName = "Ada";          // camelCase — for regular variables
-const MAX_RETRIES = 3;          // UPPER_SNAKE_CASE — for constants
-let _privateValue = 42;         // underscore prefix — marks as private
-let isLoggedIn = true;          // is/has prefix — for Booleans
-let publishedDate = "Aug 2023"; // descriptive, self-explanatory names
-```
+In the next section, let's learn how to properly name our variables in other to ensure our codes are neat and readable.
 
-> 🧠 **Tip:** A variable name should tell a story. `x` tells you nothing. `userAge` tells you exactly what it holds and why.
+How to Name Variables
+Just like naming a human or pet or labeling an object, we always put in much thought to ensure that the name tells a story and gives an idea of how we feel about the role of that pet, human, or object.
 
----
+JavaScript is somewhat liberal when it comes to how variable naming can be done and also how long it could be.
 
-## Data Types
+For example, pneumonoultramicroscopicsilicovolcanoconiosis is a valid variable name in JavaScript even though it is long.
 
-The **type** of a variable determines what operations you can perform on it. You can add two numbers, but you can't add two photos. You can drink water but not eat it.
+It is generally a good practice to give meaningful names to variables and they should be of a reasonable length.
 
-JavaScript data types split into two groups:
+Let your variables be simple and contextual. For example: author, publishedDate, readTime, shouldCompress, and so on.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    JAVASCRIPT TYPES                      │
-├──────────────────────────┬──────────────────────────────┤
-│     PRIMITIVE TYPES      │      REFERENCE TYPES         │
-│  (stored by VALUE)       │  (stored by REFERENCE)       │
-├──────────────────────────┼──────────────────────────────┤
-│  Number                  │  Object                      │
-│  String                  │  Array                       │
-│  Boolean                 │  Function                    │
-│  Undefined               │                              │
-│  Null                    │                              │
-│  BigInt                  │                              │
-│  Symbol                  │                              │
-└──────────────────────────┴──────────────────────────────┘
-```
+It should be self-explanatory. Just avoid cryptic names where possible.
 
----
+Reserved Words in JavaScript
+Even though we can create variables as we wish, some names are already being used within JavaScript to mean something specific. These names cannot be used by a developer to identify a variable. They are called reserved words.
 
-### 🔢 Number
+For instance, the keyword catch is used to properly handle an error and prevent it from crashing an application. Hence, you cannot call a variable catch in your program.
 
-In JavaScript, **all numbers** are floating-point values — whether whole or decimal, positive or negative.
+Below are all the reserved words in JavaScript:
 
-```js
+arguments await break case catch class const continue debugger default delete do else enum eval export extends false finally for function if implements import in Infinity instanceof interface let NaN new null package private protected public return static super switch this throw true try typeof undefined var void while with yield
+
+NOTE: You do not need to memorize these keywords. If you try to use them, you'll get an error and you'll learn to recognize and know them with experience.
+
+Also, JavaScript has some rules that you must follow when naming variables as well as generally accepted conventions (best practices) that you should know about. Let's talk about them in the next section.
+Rules for Naming Variables in JavaScript
+Reserved words cannot be used as variable names.
+
+The first letter of your variable name should be an alphabet, underscore (_), or a dollar sign ($). You cannot use a number as the first character of your variable name. Even though other kinds of special characters are allowed to start a variable name, as a way of good practice and avoiding complexities at the start, you should just always start with a letter. Using an underscore or dollar sign is symbolic by convention and we'll learn what they mean in the future.
+
+The rest of the variable name may contain anything but symbols, punctuations, and reserved characters (+, -, *, and so on).
+
+Variable names are case-sensitive. This means Boy and boy will be treated as different variables in your program.
+
+A variable name can be as long as is necessary for it to make sense. There is no limit imposed by the language.
+
+Spaces are not allowed in variable names.
+
+Popular Variable Naming Conventions
+Variable names with multiple words should use camel casing. That is, the first word has to be all lowercase while the first letter of subsequent words should be uppercase: studentRegistrationNumber
+
+Use uppercase letters for constant variables: const PI = 3.1432
+
+If a constant variable is composed of multiple words, use snake casing (separation of words with an underscore): const PROGRAM_NAME = "Vacation planner"
+
+If a variable is meant to be private, prefix its name with an underscore: let _memorySize = 2042.
+Note: This is just to let the team (others working on the project) know that the author intends to use it as private. It doesn't prevent the value of the variable from being accessed (there are other ways to ensure this).
+
+It is common practice to prefix Boolean variables with is or has: let isMarked = true.
+
+In the next section, we'll learn about different data types and how to work with them.
+
+Variable Data Types
+Data type simply means "type of data" 😉.
+
+The word "data" in this context means a piece of information. We'll use the word "value" sometimes to mean data and vice versa.
+
+In JavaScript, we store values of different types in variables. These values have different attributes/properties and the type of data a variable holds will determine the operations you can perform with that variable.
+
+For example, if you have water (value) stored in a container (variable), you can use the water (value) to wash or drink, but if what is stored in the container are candies, you can eat them but you won't be able to use them for washing.
+
+If you have a variable that holds numbers, you can use them to perform arithmetic operations. If the variable holds a Boolean, you cannot use it for arithmetic operations but it can be used for logical operations.
+
+💡
+The kind of value stored in the variable determines what you can do with it.
+The data types in JavaScript are categorized into two primary groups, namely;
+
+Primitive: Number, String, Boolean, Undefined, Null, BigInt, Symbol
+
+Reference: Object, Array, Function
+
+In this article, we will not talk about Symbols and BigInt to avoid complexities. The goal is to do our best to explain fundamental concepts to beginners in the most simple way possible.
+
+Let's consider primitive data types.
+
+Primitive Data Types
+Variables having these type of data are called primitives because they hold simple values. The word primitive can be translated to mean non-complex.
+
+Primitive values are usually a single unit like 1, "cup", null, undefined, true, and so on. Let's briefly consider how these data types are used and what kind of operations you can perform with them.
+
+NUMBER: In JavaScript, all numbers are floating-point values. Whether they are numbers without decimal points like a whole number that can be negative, positive, zero, or values with a decimal point like 0.2, -0.5, 1, -2, 0. They are all of the number type.
+This type of value can be used in arithmetic operations like multiplication, division, subtraction, addition, modulus, and so on.
+
 let score1 = 2;
 let score2 = 5;
-let averageScore = (score1 + score2) / 2;
-console.log(averageScore); // 3.5
-console.log(typeof score1); // "number"
-```
+let averageScore = (score1 + score2) // 2
+console.log(averageScore) // 3.5
+To check the data type of a variable's value, use the typeof operator like this: typeof variableName. That is: typeof score1
 
-**Exercise:** Copy this code into your editor and try changing the values. Use `typeof` to inspect them.
+In the code snippet above, score1 is a variable which holds a value of 2, score2 holds a value of 5, while the averageScore variable stores the result from dividing the sum of score1 and score2 by 2, which evaluates to 3.5.
 
-**Special Number Values:**
+Using the typeof operator on the score1 variable will return number.
 
-```js
+Exercise: Copy the code in the snippet above and run it in your code editor to see how it works for you. You can play around with the values and use the typeof operator to check the variables' data type.
+
+When performing arithmetic operations, you may run into other Number types like Infinity, -Infinity and NaN.
+
+Infinity means something without any limit. One way to reach infinity is to divide a number by 0.
+
 let result = 12 / 0;
-console.log(result);                       // Infinity
-console.log(Number.NEGATIVE_INFINITY);     // -Infinity
-const invalid = "Ella" / 2;
-console.log(invalid);                      // NaN — Not a Number
-```
 
-> ⚠️ **NaN** means you tried a math operation on something that isn't a number. When you see it, trace back to what value was involved in the operation.
-> Infinity/-Infinity are rare as a beginner, but knowing they exist saves confusion.
+console.log(result) // Infinity
+In the code above, we divided 12 by 0 and logged the result to the console which prints out Infinity.
 
----
+Negative Infinity is used to denote a number that is less than any natural number. To arrive at negative infinity, copy the code in the snippet below and run it in your coding environment.
 
-### 🔤 String
+console.log(Number.NEGATIVE_INFINITY) // -Infinity
+NaN means Not a Number. This will occur when you try to carry out an impossible mathematical operation as shown below:
 
-A string is a **sequence of characters** wrapped in quotes. You can use single quotes `'`, double quotes `"`, or backticks `` ` ``.
+const result = "Ella" / 2; // Trying to divide a string with a number
+console.log(result) // NaN
+The first line in the code above tries to divide a string by a number and the result is NaN.
 
-```js
+You will not often reach infinity or -Infinity as a beginner doing basic/intermediate stuff, but it is something you should be aware of so that you do not get worked up when you see it occur in your code (this is something you do not want to cram in your head). NaN is will occur more often than the others. When you see it, just know something is wrong with the operation you are trying to perform.
+
+STRING: In JavaScript, a string is a collection of characters enclosed in quotes: "Cathy".
+The snippet below shows how a string can be used in a JavaScript program:
+
 let author = "Sleekcodes";
 let publishedDate = "14 August 2023";
 
-console.log("Written by: " + author);        // Written by: Sleekcodes
-console.log("Published on: " + publishedDate); // Published on: 14 August 2023
-```
+console.log("Written by: " + author); // Written by: Sleekcodes
+console.log("Published on: " + publishedDate); // Published on: 14 August 2023"
+I am sure you noticed the + operator used with strings. When this occurs, the result is that the string on the right and that on the left will be joined together to become one. This is called string concatenation.
 
-The `+` between strings **joins them together** — this is called **string concatenation**.
+The code above is simply saying, "Create a variable called author and store the text "sleekCodes" as its value, create another variable publishedDate and store the text "14 August 2023" in it."
 
-**Modern way — Template Literals (ES6):**
+Then in line 4, we tell the JavaScript engine to log (print) the string "Written by: Sleekcodes" to the console. Line 5 also says log "Published on: 14 August 2023" to the console.
 
-```js
-let city = "Addis Ababa";
-let message = `Welcome to ${city}!`; // backtick + ${variable}
-console.log(message); // Welcome to Addis Ababa!
-```
+Notice that in the code above, during execution, author gets replaced with the value "Sleekcodes" and publishedDate gets replaced with "14 August 2023" where used.
 
-> ✅ Prefer template literals over `+` concatenation. They're cleaner, more readable, and support multi-line strings.
+Strings are used to depict or convey data in text/alphabetic format. A string can be made up of zero or more characters. A string that has no character in it is called an empty string. For example: "".
 
-A string with zero characters is called an **empty string**: `""`
-
----
-
-### ✅ Boolean
-
-Booleans represent only **two states**: `true` or `false`. On/Off. Yes/No.
-
-```js
-let isQualified = true;
+BOOLEAN: When we need to represent data in two possible states only like true/false, on/of, or yes/no, we use Boolean values. The value of a Boolean variable is either true or false.
+let isQualified = true
 
 if (isQualified) {
-  console.log("Tola is qualified"); // This runs because isQualified is true
+    console.log("Tola is qualified"); // Tola is qualified
 }
-```
+The code above will print the statement "Tola is qualified", because the value of the variable isQualified is true. That operation is a type of conditional operation. This is where Boolean values shine.
 
-**Exercise:** Change `isQualified` to `false` and observe what happens.
+Exercise: Change the value of isQualified to be false and observe what happens.
 
-> 💡 Booleans power every decision in your code. Every `if`, every condition, every comparison — all of it resolves to `true` or `false`.
+UNDEFINED: This is both a value and a data type. undefined is used to indicate that a variable has no defined value. For instance, when a variable is declared (let age), and you try to access its value, the result would be undefined.
+let age; // note that there is no value assigned to the variable here
 
----
+console.log(age); // undefined
+In the code snippet above, because age isn't given any explicit value, the compiler assigns the value undefined to the variable by default.
 
-### ❓ Undefined
+Exercise: Use the typeof operator on the variable age and see what you get. Also, assign the value undefined to age and use the typeof operator on it again to see the result.
 
-`undefined` is both a **value and a type**. It means a variable exists but has no assigned value yet.
+NULL: Null is a value we can assign to a variable to indicate that it has no value. It is used to represent "empty" or "unknown".
+let age = null;
 
-```js
-let age; // declared but no value given
-console.log(age); // undefined — JavaScript assigned this automatically
-```
-
-**Exercise:** Use `typeof age` to see what type `undefined` is. Then assign `undefined` explicitly and check again.
-
----
-
-### 🚫 Null
-
-`null` is a value **you assign intentionally** to say "this container is empty right now."
-
-```js
-let age = null; // explicitly set to empty
 console.log(age); // null
-```
+As seen in the code snippet above, instead of letting the compiler assign undefined for us, we explicitly indicate that the variable has no value by assigning the value null to it.
 
-**The Key Difference:**
+This means age is empty or unknown.
 
-| | `undefined` | `null` |
-|---|---|---|
-| Who sets it? | JavaScript (automatic) | You, the developer |
-| Meaning | "No value was assigned yet" | "I intentionally set this to empty" |
-| Rule | Don't assign it yourself | Use when a value is purposely absent |
+People often get confused about the difference between undefined and null. One is the default value assigned to a variable without an explicit value, while the other (null) is a value assigned to a variable by the programmer deliberately to indicate that the variable is empty. As a rule of thumb, do not assign undefined to a variable, instead use null (the compiler auto-assigns undefined where needed).
 
-> 🧠 As a rule: never manually assign `undefined`. Use `null` when you want to say "empty on purpose."
+Primitive data types have no complexity. They are plain and simple (a single value). This statement will make more sense when you read about how reference types work in the next section.
 
----
+Consider the image below.
 
-### 📦 Reference Types — Passed by Reference
+![alt text](.images/image.png)
+Part A above is the code you write, while Part B is what happens when the code runs. For primitive data types, the value is simply assigned to the variable (it is straightforward).
 
-Here's where things get interesting. With **primitive types**, the value is stored directly in the variable:
+Primitive values are passed by value (they generate no reference). Do not worry about what this means yet because we'll explain in the next section.
 
-```
-Primitive:   variable ──────────────→ value
-```
+Reference Types in JavaScript
+Reference data types are data passed by "reference". A thorough understanding of this statement is crucial throughout your career as a JavaScript developer, so do well to pay close attention to the concept we are about to learn.
 
-With **reference types**, the variable stores a *reference* (like a GPS coordinate) that points to the actual data:
+Consider the image below carefully.
+![alt text](.images/image-1.png)
+In the image above, part A is the code you write, while part B is what happens "behind the scenes".
 
-```
-Reference:   variable → reference address → actual value
-```
+💡
+Use the image above to follow through with the following explanation.sa
+When you create a variable whose data type is in the reference category (objects, functions, arrays), instead of the value being directly assigned to the variable, a reference is generated for the value and that reference is what gets assigned to the variable.
 
-![Primitive vs Reference types in memory](image.png)
+The reference gets assigned to the variable, but it points to the actual value.
 
-*(Part A is your code. Part B is what happens in memory behind the scenes.)*
+This means that when you try to use the variable anywhere, you are working with the reference to the actual value and anything done to the reference affects the actual value.
 
-**Why does this matter?** Watch carefully:
+Think of it like a middleman between the actual value and the variable name.
 
-```js
+Consider the example below:
+
 let studentInfo = {
-  name: "John Doe",
-  age: 205
-};
+    name: "John Doe",
+    age: 205
+}
 
-let staffInfo = studentInfo; // staffInfo stores the SAME reference as studentInfo
+let staffInfo = studentInfo //6. This means; assign the ref of studentInfo to staffInfo
 
-staffInfo.name = "Lorry Sante"; // changes the value the reference points to
+staffInfo.name = "Lorry Sante" //8. Change the value of name key in the reference which staffInfo holds.
 
-console.log(studentInfo.name); // "Lorry Sante" — it changed too!
-```
+console.log(studentInfo.name) //9. Lorry Sante
+💡
+Try this: In line 7 and 8, log the value of studentInfo.name and staffInfo.name to the console to see what they are.
+You should notice that, changing name in staffInfo object (line 8), causes the name in studentInfo object to change too (as seen in the output of line 9).
 
-![Both variables pointing to the same object](image-1.png)
+In fact, both variables are pointing to the same value technically (see image below);
 
-Both `studentInfo` and `staffInfo` are pointing to the **same object in memory**. Changing the name through one variable affects the other, because they're both GPS coordinates pointing to the same location.
+![alt text](.images/image-2.png)
+When we say that a variable is passed by reference, it means that anywhere that variable is used, you are interacting with a reference (that points) to its actual value.
 
-![Memory diagram](image-2.png)
+So in the code snippet above, when studentInfo was assigned to staffInfo, we just made staffInfo to store the reference of the studentInfo variable, effectively saying that both staffInfo and studentInfo variables are pointing to the same value.
 
-> 🔁 If this feels confusing, re-read this section. Understanding pass-by-reference is one of the most important concepts in your entire JavaScript career.
+Therefore, if the reference generated for studentInfo is 000xx2 and it is true that during execution, variables are replaced by whatever they hold, then staffInfo = studentInfo would become staffInfo = 000xx2 during execution, while staffInfo.name would become 000xx2.name.
 
----
+If we had written studentInfo.name, then during execution, it becomes 000xx2.name, it should be clear now that both studentInfo and staffInfo holds references to one value. They are like different roads to one destination.
 
-### 🗂️ Object
+💡
+If this is your first time learning this concept, you should repeat the section above before you proceed. It will become clearer and when we start operating with reference types, you'll be glad you read this article.
+There are three main reference data types that you'll mostly come across in your journey as a JavaScript developer: Object, Array, and Function. Let's look into them one after the other.
 
-An object stores **related data as key-value pairs** — perfect for representing real-world things.
-
-```js
+OBJECT: An object is a data structure used to store complex data in key/value pairs. The variable created in the previous session has an object type like this:
 let studentInfo = {
-  name: "John Doe",
-  age: 205
-};
-```
+    name: "John Doe",
+    age: 205
+}
+You can see that it isn't primitive (simple). Unlike primitive types with just simple values, an object can be used to store different information which can be made up of even primitive and reference types.
 
-To access a value, use **dot notation**: `objectName.key`
+Objects store data in key/value pairs like so: {key: value}
 
-```js
-console.log(studentInfo.name); // "John Doe"
-console.log(studentInfo.age);  // 205
-```
+In the code snippet above, name is key, while "John Doe" is its value. Also, age is key, while 205 is its value.
 
-Objects can **nest** other objects:
+If you notice, both name and age have primitive values (string and number).
 
-```js
+To access the value of an object, we use the object name, dot (.) notation, and the key whose value we want to access. For example: objectName.key.
+
+Objects can also contain nested objects like so:
+
 let studentInfo = {
-  name: "John Doe",
-  age: 205,
-  beneficiary: {
-    name: "Tira Doe",
-    age: 200,
-    relationship: "Wife"
-  }
-};
+    name: "John Doe",
+    age: 205,
+    beneficiary: {
+       name: "Tira Doe",
+       age: 200,
+       relationship: "Wife"
+    }
+}
+In the above example, the studentInfo object has a nested object called beneficiary. beneficiary is a key whose value is an object (reference type). Objects can still hold arrays and functions too.
 
-// Access nested values with chained dot notation
-console.log(studentInfo.beneficiary.name); // "Tira Doe"
-```
+Accessing the value associated with a key in an object within another object (nested object) is natural. We simply use dot notation. Like so: parentObjectName.nestedObjectName.key
 
-> 💡 There's no limit to nesting objects — but keep it reasonable. Deep nesting gets hard to read and maintain.
+For example, to access the name of the beneficiary in studentInfo object above, we simply write studentInfo.beneficiary.name.
 
----
+💡
+There's no limit to nesting objects in objects. However, ensure that nesting is necessary for what you want to achieve and too much nesting should be avoided for simplicity.
+This is not all that you need to know about objects but it is a very sound way to start.
 
-### 📋 Array
+ARRAY: An array is a kind of object but stores data using automatically assigned indexes instead of keys.
+An array is created by writing a comma-separated list of values enclosed with square brackets: [0, 1, 2, 3, "Tosin", "Mike", {name: "Abel Joe", age: 250}]
 
-An array stores a **list of values**, accessed by their position (**index**), starting at `0`.
+If you pay close attention to the values used in the array above, you'll notice that they are of different data types. Yes, arrays also allow you to store values of different types in one place but this is strongly discouraged (you shouldn't do it at all). The values in an array should all be of the same type.
 
-```js
-let scores = [1, 3, 5, 6, 9, 12];
+Example of a proper array: let scores = [1, 3, 5, 6, 9, 12]
 
-console.log(scores[0]); // 1 — first item
-console.log(scores[3]); // 6 — fourth item
-```
+To access a value in an array, we simply specify the array name, followed by a square bracket [] without any space between the name and the bracket. Then inside the square bracket, provide the index of the value you wish to access. That is: arrayName[index].
 
-![Array index diagram](image-3.png)
+What's an index and how do we know what index refers to the value we want to access?
 
-```
-Index:   0    1    2    3    4    5
-Value:  [1,   3,   5,   6,   9,  12]
-```
+An index is simply a number automatically assigned to an array value. You can think of it as an address for values in the array. Arrays are 0 indexed (meaning they start counting from zero).
 
-To access `80` in a `scores` array at position 3: `scores[3]`
+To determine the index of the value you wish to access, start counting from the start of the array and your count should start from 0.
 
-> ⚠️ Arrays are **zero-indexed**. The first item is always at index `0`. This catches almost every beginner at least once!
+Consider the image below;
 
-Arrays can technically hold mixed types, but **don't do it** — keep all values the same type:
-```js
-// ❌ Bad practice
-let mixed = [1, "hello", true, {name: "John"}];
+![alt text](.images/image-3.png)
 
-// ✅ Good practice
-let prices = [10.99, 24.50, 5.00, 99.99];
-```
+To access the value 80 in the scores array depicted in the image above, we simply write scores[3]
 
----
+There is a lot you can do with arrays as a JavaScript developer. For now, this is a simple introduction to the array data type.
 
-### ⚙️ Function (Introduction)
+FUNCTION: A function is a different kind of variable and it's declared differently (using the function keyword instead of let, const or var). It is a construct used to carry out a specific task.
+For example, if you need to add two numbers together multiple times within your code, it's best practice to create a dedicated function for this task. By reusing this function, you avoid redundant code and improve code maintainability compared to repeatedly writing the addition logic. Wait!!! You are not lost. The example below will confirm this 😊
 
-A function is a **reusable block of code** that performs a specific task. Write it once, call it anytime.
-
-**Without a function (repetitive 😓):**
-```js
-let num1 = 2, num2 = 3;
+Scenario 1 (without function):
+let num1 = 2;
+let num2 = 3;
 let result = num1 + num2;
-console.log(result); // 5
 
-let num3 = 3, num4 = 8;
+console.log(result) // 5
+
+let num3 = 3;
+let num4 = 8;
 let result2 = num3 + num4;
-console.log(result2); // 11
-```
 
-**With a function (clean ✅):**
-```js
-function addNumbers(num1, num2) {
-  return num1 + num2;
+console.log(result2) // 11
+Scenario 2 (with function):
+
+// function declaration.
+function addNumbers (num1, num2) {
+    return num1 + num2;
 }
 
 console.log(addNumbers(2, 3)); // 5
 console.log(addNumbers(3, 8)); // 11
-```
+You will agree that, scenario 2 contains less code, looks neater, and even feels more natural.
 
-See how much cleaner that is? Functions are covered in detail in [Section 6](#6--functions).
+Functions allow us write helpers that we can call to get a specific job done for us any time we want. We just have to tell it how to do the job once and call it anytime we need it to do that job (passing in any information required for the task as arguments) and it delivers.
 
----
+Function Syntax:
 
-## 4 — Operators
+To write a function, we use the function keyword, followed by the name of the function: functionName, a pair of brackets (), and a pair of curly braces {}.
 
-### ➕ Arithmetic Operators
+function functionName () {}
+There are a few things/conventions you should have in mind when writing functions:
 
-| Operator | Name | Purpose | Example |
-|---|---|---|---|
-| `+` | Addition | Adds two numbers | `6 + 9` → `15` |
-| `-` | Subtraction | Subtracts right from left | `20 - 15` → `5` |
-| `*` | Multiplication | Multiplies two numbers | `3 * 7` → `21` |
-| `/` | Division | Divides left by right | `10 / 5` → `2` |
-| `%` | Remainder (Modulo) | Returns the leftover after division | `8 % 3` → `2` |
-| `**` | Exponent | Raises to a power | `5 ** 2` → `25` |
+Function names should follow the same naming rules as variables.
 
-> 📝 **Note:** `Math.pow(7, 3)` is the older equivalent of `7 ** 3`. Both return `343`.
+Function names should be verbs (to depict an action).
 
-**Try these in your console:**
-```js
+The code logic for the actual task should be written between the opening { and closing } curly braces.
+
+If there are values required to carry out the task, they should be passed into the function as arguments. In this case, during the function declaration, parameters should be stated between the opening ( and closing ) brackets in a comma-separated fashion. That is: function addNumbers(num1, num2)....
+
+If no data is required to carry out the task, then the opening ( and closing ) brackets should be left empty: function sayHi()....
+
+A parameter is a variable defined between the opening ( and closing ) of a function during its declaration: function doSomething (param1, param2) {...}.
+
+An argument is the value passed into the function during its invocation/call: doSomething(1, 2)
+
+As seen above, to call/invoke a function, write the function name, followed by an opening and a closing bracket (without any whitespace). Required arguments should be provided between the opening and closing brackets (if any).
+
+To drive this concept home, let's create a function to multiply two digits:
+
+//        functionName   param1 param2
+function multiplyNumbers (num1, num2) {
+    return num1 * num2; // task to carry out.
+}
+It's as simple as that.
+
+Having done that, let's call/invoke the function.
+
+multiplyNumbers(2, 3) // 6
+Notice that while creating the function, we declared two parameters: num1 and num2. When calling the function, we assigned values to the two arguments: 1 and 2.
+
+return keyword
+
+Functions may return values or not.
+
+If a function contains a return statement, like the multiplyNumbers function, then it will return a value if everything goes well. If there is no return statement for the function, it will return undefined.
+
+function sayHi () {
+    console.log("Hi");
+}
+If we invoke sayHi, it would log the text Hi to the console and it will also return undefined.
+
+Remember that functions are like helpers, when you send a helper to carry out an assignment, you may require them to give you feedback (the result of the task they carried out) or you may not need feedback.
+
+If you need feedback, add a return statement about what feedback you need. Otherwise, do not add a return statement to the function.
+
+There is still a lot to learn about every data type we have highlighted in this article so take your time to practice these basics and when you feel comfortable enough using them, you'll see the need to dive deeper.
+
+Summary
+Variables are "pointers" to values. When you mention (use) a variable anywhere in your code, the variable identifier (name) is replaced with the value it points to. It's just like calling someone's name. The name doesn't respond, the person (value) behind the name is what you hope to get as a response.
+
+By way of retention, do not try to cram all these rules and conventions. Feel free to refer back to this article when programming and in a short amount of time, you'll be used to all of them and you won't need to refer to any article ever again to name your variables properly.
+
+If you should have anything in mind, remember to start variables with a lowercase letter if the variable is made of multiple words, subsequent words should start with uppercase letters. That is: age, dateOfBirth.
+
+To create a variable, use the keyword let, const, or var, followed by the variable name. If you wish to initialize the variable, then on the same line before the semi-colon, input the assignment operator and variable value after it.
+
+For example: let score; or let score = 3; (if you wish to initialize during declaration).
+
+If you wish to use a variable, just mention its name and the value will be used during the execution of your code.
+
+let a = 2;
+let b = 3;
+console.log(a + b) // 4
+
+Arithmetic operators
+Arithmetic operators are used for performing mathematical calculations in JavaScript:
+
+Operator	Name	Purpose	Example
++	Addition	Adds two numbers together.	6 + 9
+-	Subtraction	Subtracts the right number from the left.	20 - 15
+*	Multiplication	Multiplies two numbers together.	3 * 7
+/	Division	Divides the left number by the right.	10 / 5
+%	Remainder (sometimes called modulo)	
+Returns the remainder left over after you've divided the left number into a number of integer portions equal to the right number.
+
+8 % 3 (returns 2, as three goes into 8 twice, leaving 2 left over).
+
+**	Exponent	Raises a base number to the exponent power, that is, the base number multiplied by itself, exponent times.	5 ** 2 (returns 25, which is the same as 5 * 5).
+Note: You'll sometimes see numbers involved in arithmetic referred to as operands.
+
+Note: You may sometimes see exponents expressed using the older Math.pow() method, which works in a very similar way. For example, in Math.pow(7, 3), 7 is the base and 3 is the exponent, so the result of the expression is 343. Math.pow(7, 3) is equivalent to 7**3.
+
+We probably don't need to teach you how to do basic math, but we would like to test your understanding of the syntax involved. Try entering the examples below into your developer tools JavaScript console to familiarize yourself with the syntax.
+
+First try entering some simple examples of your own, such as
+
+js
+
+Copy
 10 + 7;
 9 * 8;
 60 % 3;
+You can also try declaring and initializing some numbers inside variables, and try using those in the sums — the variables will behave exactly like the values they hold for the purposes of the sum. For example:
 
+js
+
+Copy
 const num1 = 10;
 const num2 = 50;
 9 * num1;
 num1 ** 3;
 num2 / num1;
+Last for this section, try entering some more complex expressions, such as:
 
-5 + 10 * 3;       // What do you expect?
+js
+
+Copy
+5 + 10 * 3;
 (num2 % 9) * num1;
 num2 + num1 / 8 + 2;
-```
+Parts of this last set of calculations might not give you quite the result you were expecting; the section below might well give the answer as to why.
 
----
+Operator precedence
+Let's look at the last example from above, assuming that num2 holds the value 50 and num1 holds the value 10 (as originally stated above):
 
-### 📐 Operator Precedence
+js
 
-JavaScript follows the same math rules you learned in school — multiplication and division happen **before** addition and subtraction.
-
-```js
-// num2 = 50, num1 = 10
+Copy
 num2 + num1 / 8 + 2;
-// Browser reads: 10 / 8 = 1.25 → 50 + 1.25 + 2 = 53.25
-// NOT: 50 + 10 = 60 → 60 / 8 = 7.5 (that's how a human might read it left-to-right)
-```
+As a human being, you may read this as "50 plus 10 equals 60", then "8 plus 2 equals 10", and finally "60 divided by 10 equals 6".
 
-Use **parentheses** to force the order you want:
+But the browser does "10 divided by 8 equals 1.25", then "50 plus 1.25 plus 2 equals 53.25".
 
-```js
-(num2 + num1) / (8 + 2); // (60) / (10) = 6
-```
+This is because of operator precedence — some operators are applied before others when calculating the result of a calculation (referred to as an expression, in programming). Operator precedence in JavaScript is the same as is taught in math classes in school — multiply and divide are always done first, then add and subtract (the calculation is always evaluated from left to right).
 
----
+If you want to override operator precedence, you can put parentheses around the parts that you want to be explicitly dealt with first. So to get a result of 6, we could do this:
 
-### 🔼 Increment & Decrement
+js
 
-```js
+Copy
+(num2 + num1) / (8 + 2);
+Try entering the previous line into the console to test this out.
+
+Note: A full list of all JavaScript operators and their precedence can be found in Operator precedence.
+
+Increment and decrement operators
+Sometimes you'll want to repeatedly add or subtract one to or from a numeric variable value. This can be conveniently done using the increment (++) and decrement (--) operators. We used ++ in our "Guess the number" game back in our first splash into JavaScript article, when we added 1 to our guessCount variable to keep track of how many guesses the user has left after each turn.
+
+js
+
+Copy
+guessCount++;
+Let's try playing with these in your console. For a start, note that you can't apply these directly to a number, which might seem strange, but we are assigning a variable a new updated value, not operating on the value itself. The following will return an error:
+
+js
+
+Copy
+3++;
+So, you can only increment an existing variable. Try this:
+
+js
+
+Copy
 let num1 = 4;
-num1++;        // Post-increment: returns 4, THEN increments to 5
-num1;          // Now shows 5
+num1++;
+Okay, strangeness number 2! When you do this, you'll see a value of 4 returned — this is because the browser returns the current value, then increments the variable. You can see that it's been incremented if you return the variable value again:
 
+js
+
+Copy
+num1;
+The same is true of -- : try the following
+
+js
+
+Copy
 let num2 = 6;
-num2--;        // Post-decrement: returns 6, THEN decrements to 5
-num2;          // Now shows 5
-```
+num2--;
+num2;
+Note: You can make the browser do it the other way round — increment/decrement the variable then return the value — by putting the operator at the start of the variable instead of the end. Try the above examples again, but this time use ++num1 and --num2.
 
-> 📝 **Note:** `++num1` (prefix) increments first then returns. `num1++` (postfix) returns first then increments. Try both in your console to see the difference.
+Assignment operators
+Assignment operators are operators that assign a value to a variable. We have already used the most basic one, =, many times — it assigns the variable on the left the value stated on the right:
 
----
+js
 
-### 📝 Assignment Operators
+Copy
+let x = 3; // x contains the value 3
+let y = 4; // y contains the value 4
+x = y; // x now contains the same value y contains, 4
+But there are some more complex types, which provide useful shortcuts to keep your code neater and more efficient. The most common are listed below:
 
-| Operator | Name | Purpose | Example | Shortcut For |
-|---|---|---|---|---|
-| `=` | Assignment | Assigns value | `x = 5` | — |
-| `+=` | Addition assignment | Adds then assigns | `x += 4` | `x = x + 4` |
-| `-=` | Subtraction assignment | Subtracts then assigns | `x -= 3` | `x = x - 3` |
-| `*=` | Multiplication assignment | Multiplies then assigns | `x *= 3` | `x = x * 3` |
-| `/=` | Division assignment | Divides then assigns | `x /= 5` | `x = x / 5` |
+Operator	Name	Purpose	Example	Shortcut for
++=	Addition assignment	Adds the value on the right to the variable value on the left, then returns the new variable value	x += 4;	x = x + 4;
+-=	Subtraction assignment	Subtracts the value on the right from the variable value on the left, and returns the new variable value	x -= 3;	x = x - 3;
+*=	Multiplication assignment	Multiplies the variable value on the left by the value on the right, and returns the new variable value	x *= 3;	x = x * 3;
+/=	Division assignment	Divides the variable value on the left by the value on the right, and returns the new variable value	x /= 5;	x = x / 5;
+Try typing some of the above examples into your console, to get an idea of how they work. In each case, see if you can guess what the value is before you type in the second line.
 
-```js
-let x = 3; // x contains 3
-let y = 4; // y contains 4
-x = y;     // x now contains 4
+Note that you can quite happily use other variables on the right-hand side of each expression, for example:
 
-x *= y;    // x now contains 16 (4 * 4)
-```
+js
 
----
+Copy
+let x = 3; // x contains the value 3
+let y = 4; // y contains the value 4
+x *= y; // x now contains the value 12
+Comparison operators
+Sometimes we will want to run true/false tests, then act accordingly depending on the result of that test — to do this we use comparison operators.
 
-### ⚖️ Comparison Operators
+Operator	Name	Purpose	Example
+===	Strict equality	Tests whether the left and right values are identical to one another	5 === 2 + 4
+!==	Strict-non-equality	Tests whether the left and right values are not identical to one another	5 !== 2 + 3
+<	Less than	Tests whether the left value is smaller than the right one.	10 < 6
+>	Greater than	Tests whether the left value is greater than the right one.	10 > 20
+<=	Less than or equal to	Tests whether the left value is smaller than or equal to the right one.	3 <= 2
+>=	Greater than or equal to	Tests whether the left value is greater than or equal to the right one.	5 >= 4
+Note: You may see some people using == and != in their tests for equality and non-equality. These are valid operators in JavaScript, but they differ from ===/!==. The former versions test whether the values are the same but not whether the values' datatypes are the same. The latter, strict versions test the equality of both the values and their datatypes. The strict versions tend to result in fewer errors, so we recommend you use them.
 
-Comparison operators always return `true` or `false`.
+If you try entering some of these values in a console, you'll see that they all return true/false values — those booleans we mentioned in the last article. These are very useful, as they allow us to make decisions in our code, and they are used every time we want to make a choice of some kind. For example, booleans can be used to:
 
-| Operator | Name | Purpose | Example |
-|---|---|---|---|
-| `===` | Strict equality | Value AND type must match | `5 === 2 + 3` |
-| `!==` | Strict non-equality | Value OR type must differ | `5 !== 2 + 3` |
-| `<` | Less than | Left is smaller than right | `10 < 6` |
-| `>` | Greater than | Left is greater than right | `10 > 20` |
-| `<=` | Less than or equal | Left is ≤ right | `3 <= 2` |
-| `>=` | Greater than or equal | Left is ≥ right | `5 >= 4` |
+Display the correct text label on a button depending on whether a feature is turned on or off
+Display a game over message if a game is over or a victory message if the game has been won
+Display the correct seasonal greeting depending on what holiday season it is
+Zoom a map in or out depending on what zoom level is selected
+We'll look at how to code such logic when we look at conditional statements in a future article. For now, let's look at a quick example:
 
-> ⚠️ **`==` vs `===`**: `==` checks value only (dangerous). `===` checks value AND type (safe). Always use `===`.
-> ```js
-> 5 == "5"   // true  ← JS quietly converts "5" to 5 (type coercion)
-> 5 === "5"  // false ← strict: number ≠ string
-> ```
+html
 
-**Real example — a toggle button:**
-
-```html
+Copy
+Play
 <button>Start machine</button>
 <p>The machine is stopped.</p>
-```
+js
 
-```js
+Copy
+Play
 const btn = document.querySelector("button");
 const txt = document.querySelector("p");
 
@@ -622,1001 +689,125 @@ function updateBtn() {
     txt.textContent = "The machine is stopped.";
   }
 }
-```
+Play
 
-> 📝 This is called a **toggle** — a control that switches between two states (on/off, start/stop, show/hide).
+You can see the equality operator being used just inside the updateBtn() function. In this case, we are not testing if two mathematical expressions have the same value — we are testing whether the text content of a button contains a certain string — but it is still the same principle at work. If the button is currently saying "Start machine" when it is pressed, we change its label to "Stop machine", and update the label as appropriate. If the button is currently saying "Stop machine" when it is pressed, we swap the display back again.
 
----
+Note: Such a control that swaps between two states is generally referred to as a toggle. It toggles between one state and another — light on, light off, etc.
 
-## 5 — Control Flow
 
-Control flow is how you make your program **decide** and **repeat**. Without it, code just runs straight from top to bottom — no decisions, no loops, no logic.
+JavaScript Control Flow Statements
+Last Updated : 5 May, 2026
+Control flow statements in JavaScript control the order in which code is executed. These statements allow you to make decisions, repeat tasks, and jump between parts of a program based on specific conditions.
 
----
-
-### 🚦 if Statement
-
-Executes a block of code **only if** a condition is true.
-
-![if statement flowchart](image-4.png)
-
-```js
+JavaScript if Statement
+The if statement executes a block of code only if a specified condition is true.
+![alt text](.images/image-4.png)
 const age = 18;
 if (age >= 18) {
-  console.log("You are an adult.");
+    console.log("You are an adult.");
 }
-// Checks if age >= 18. Logs "You are an adult." only if true.
-```
-
----
-
-### 🔀 if...else Statement
-
-Provides an **alternative** block if the condition is false.
-
-![if-else flowchart](image-5.png)
-
-```js
+Checks if age is greater than or equal to 18.
+Logs "You are an adult." if the condition is true.
+JavaScript if...else Statement
+The if...else statement provides an alternate block of code to execute if the condition is false.
+![alt text](.images/image-5.png)
 const score = 40;
 if (score >= 50) {
-  console.log("You passed.");
+    console.log("You passed.");
 } else {
-  console.log("You failed.");
+    console.log("You failed.");
 }
-// Logs "You failed." because 40 < 50
-```
+It will log "You passed." if the score is 50 or more.
+Otherwise, logs "You failed."
+JavaScript if...else if...else Statement
+The if...else if...else statement is used when you want to handle multiple conditions.
+![alt text](.images/image-6.png)
 
----
-
-### 🪜 if...else if...else Statement
-
-Handles **multiple conditions** in sequence.
-
-![if-else if-else flowchart](image-6.png)
-
-```js
 const temp = 25;
 if (temp > 30) {
-  console.log("It's hot.");
+    console.log("It's hot.");
 } else if (temp >= 20) {
-  console.log("It's warm."); // This runs — 25 is between 20 and 30
+    console.log("It's warm.");
 } else {
-  console.log("It's cold.");
+    console.log("It's cold.");
 }
-```
+Checks if the temperature is greater than 30, logs "It's hot."
+If not, checks if it's between 20 and 30, logs "It's warm."
+Otherwise, logs "It's cold."
+JavaScript Switch Statement
+The switch statement evaluates an expression and executes a block of code based on matching cases. It provides an alternative to long if-else chain.
+![alt text](.images/image-7.png)
 
-Think of it like a bouncer — the first condition that passes is the one that runs. The rest are skipped.
 
----
-
-### 🎛️ switch Statement
-
-Evaluates an expression and runs the matching `case`. Cleaner than long `if/else` chains when checking one variable against multiple exact values.
-
-![switch flowchart](image-7.png)
-
-```js
 const day = "Monday";
 switch (day) {
-  case "Monday":
-    console.log("Start of the week.");
-    break;
-  case "Friday":
-    console.log("End of the workweek.");
-    break;
-  default:
-    console.log("It's a regular day.");
+    case "Monday":
+        console.log("Start of the week.");
+        break;
+    case "Friday":
+        console.log("End of the workweek.");
+        break;
+    default:
+        console.log("It's a regular day.");
 }
-```
+Checks the value of day and matches it to a case.
+Logs "Start of the week." if day is "Monday".
+Logs "End of the workweek." if day is "Friday".
+Logs "It's a regular day." if no cases match.
+Note: Without break, execution continues to the next case statements (fall-through behavior).
 
-- Checks `day` and runs the matching case
-- `break` exits the switch — **without it**, execution continues into the next case (fall-through)
-- `default` runs when no cases match
+JavaScript Looping Statements
+Looping statements are used to execute a block of code repeatedly based on a condition.
 
-> ⚠️ **Fall-through behavior:** Without `break`, JavaScript keeps executing into the next case even if it doesn't match. This is sometimes intentional, but usually a bug.
+1. JavaScript for Loop
+The for loop is used when the number of iterations is known.
 
----
 
-### ❓ Ternary Operator
 
-A compact one-liner if/else — great for simple decisions:
 
-![Ternary diagram](image-8.png)
-
-```js
-let a = 10;
-console.log(a === 5 ? "a is equal to 5" : "a is not equal to 5");
-// "a is not equal to 5"
-```
-
-Syntax: `condition ? valueIfTrue : valueIfFalse`
-
-- `a === 5` — checks if a is strictly equal to 5
-- Returns `"a is equal to 5"` if true
-- Returns `"a is not equal to 5"` if false
-
----
-
-### 🔄 Looping Statements
-
-Loops run a block of code **repeatedly** based on a condition.
-
-#### `for` Loop — when you know the number of iterations
-
-```js
+Loading Playground...
 for (let i = 1; i <= 3; i++) {
-  console.log(i);
-}
-// 1, 2, 3
-```
+    console.log(i);}
 
-Three parts: `let i = 1` (initialize), `i <= 3` (condition), `i++` (update after each iteration). Runs until the condition becomes false.
+    Initializes a counter, checks condition, and updates it in each iteration.
+Executes the block until the condition becomes false.
+2. JavaScript while Loop
+The while loop runs as long as the condition is true.
 
----
-
-#### `while` Loop — runs as long as condition is true
-
-```js
 let i = 1;
 while (i <= 3) {
-  console.log(i);
-  i++;
+    console.log(i);
+    i++;
 }
-// 1, 2, 3
-```
+Checks the condition before each iteration.
+Executes the block only if the condition is true.
+3. JavaScript do...while Loop
+The do...while loop executes the block at least once, even if the condition is false.
 
-Checks the condition **before** each iteration. If the condition is false from the start, it never runs.
-
----
-
-#### `do...while` Loop — runs at least once
-
-```js
 let i = 1;
 do {
-  console.log(i);
-  i++;
+    console.log(i);
+    i++;
 } while (i <= 3);
-// 1, 2, 3
-```
-
-Executes the block **first**, then checks the condition. Guarantees at least one execution.
-
----
-
-### Control: `break` and `continue`
-
-```js
-// break — exit the loop entirely
-for (let i = 0; i < 10; i++) {
-  if (i === 5) break;
-  console.log(i); // 0, 1, 2, 3, 4
-}
-
-// continue — skip this iteration, move to next
-for (let i = 0; i < 5; i++) {
-  if (i === 2) continue;
-  console.log(i); // 0, 1, 3, 4
-}
-```
-
-**Uses of Control Flow:**
-- **Decision-Making:** Execute code based on conditions (`if`, `if...else`)
-- **Branching:** Exit or skip iterations (`break`, `continue`)
-- **Looping:** Repeat tasks (`for`, `while`, `do...while`)
-- **Switching:** Handle multiple exact-match conditions (`switch`)
-
----
-
-## 6 — Functions
-
-### 🎯 What is a Function?
-
-A function is a **reusable block of code** that performs a specific task. Instead of writing the same logic multiple times, you write it once, name it, and call it whenever you need it.
-
-> **Analogy:** A function is like a kitchen appliance. You buy a blender once. Every morning you press the button — it does its job. You don't buy a new blender every morning.
-
-**Syntax:**
-
-```js
-function functionName(parameter1, parameter2) {
-  // task to carry out
-  return result;
-}
-
-// Call/invoke the function
-functionName(argument1, argument2);
-```
-
-**Real example:**
-
-```js
-//         name          params
-function multiplyNumbers(num1, num2) {
-  return num1 * num2; // task
-}
-
-multiplyNumbers(2, 3); // 6 — 2 and 3 are arguments
-multiplyNumbers(4, 5); // 20
-```
-
----
-
-### Parameters vs Arguments
-
-```
-function add(num1, num2)  ← num1, num2 are PARAMETERS (placeholders)
-           add(5, 10)     ← 5, 10 are ARGUMENTS (actual values)
-```
-
-- **Parameter** = the variable defined in the function signature
-- **Argument** = the actual value passed when calling the function
-
----
-
-### The `return` Keyword
-
-Functions can return a value — or not.
-
-```js
-function sayHi() {
-  console.log("Hi"); // logs to console but returns undefined
-}
-
-function greet(name) {
-  return `Hello, ${name}!`; // returns a value to the caller
-}
-
-let message = greet("Marta");
-console.log(message); // "Hello, Marta!"
-```
-
-> Think of it like sending a helper on an errand:
-> - **No return** = helper does the job but gives you no report
-> - **With return** = helper comes back and hands you the result
-
----
-
-### Function Naming Conventions
-
-```js
-// ✅ Use verbs — functions DO things
-function getUserData() {}
-function calculateTotal() {}
-function sendEmail() {}
-
-// ❌ Avoid nouns
-function userData() {}
-function total() {}
-```
-
----
-
-### Function Expressions
-
-Functions can also be stored in variables:
-
-```js
-const add = function(a, b) {
-  return a + b;
-};
-
-console.log(add(3, 4)); // 7
-```
-
----
-
-### Arrow Functions (ES6)
-
-A shorter, modern syntax for functions (covered more in [Section 8](#8--es6-features)):
-
-```js
-// Traditional
-function add(a, b) { return a + b; }
-
-// Arrow function
-const add = (a, b) => a + b;
-
-console.log(add(3, 4)); // 7
-```
-
----
-
-### Scope
-
-**Scope** determines where a variable is accessible.
-
-```js
-let globalVar = "I'm global"; // accessible everywhere
-
-function myFunction() {
-  let localVar = "I'm local"; // only accessible inside this function
-  console.log(globalVar);     // ✅ Can access global
-  console.log(localVar);      // ✅ Can access local
-}
-
-console.log(globalVar); // ✅
-console.log(localVar);  // ❌ ReferenceError: localVar is not defined
-```
-
-> 🧠 Think of scope like rooms in a building. Everyone in the building can access the lobby (global). But only people in Room 5 can access what's in Room 5 (local).
-
----
-
-## 7 — Arrays & Objects
-
-### 📋 Arrays — Deep Dive
-
-An array is an **ordered list** of values.
-
-```js
-let fruits = ["apple", "banana", "mango"];
-console.log(fruits[0]); // "apple"
-console.log(fruits.length); // 3
-```
-
-#### Common Array Methods
-
-```js
-let scores = [85, 90, 78, 92, 88];
-
-// Add/remove items
-scores.push(95);          // Add to end → [85, 90, 78, 92, 88, 95]
-scores.pop();             // Remove from end → [85, 90, 78, 92, 88]
-scores.unshift(70);       // Add to start → [70, 85, 90, 78, 92, 88]
-scores.shift();           // Remove from start → [85, 90, 78, 92, 88]
-
-// Find & check
-console.log(scores.indexOf(90));     // 1 — position of 90
-console.log(scores.includes(78));    // true
-console.log(scores.length);          // 5
-
-// Transform
-let doubled = scores.map(s => s * 2);         // [170, 180, 156, 184, 176]
-let passed  = scores.filter(s => s >= 85);    // [85, 90, 92, 88]
-let total   = scores.reduce((sum, s) => sum + s, 0); // 433
-
-// Iterate
-scores.forEach(score => console.log(score));
-
-// Sort
-scores.sort((a, b) => a - b); // [78, 85, 88, 90, 92] — ascending
-```
-
-#### Destructuring Arrays
-
-```js
-let [first, second, ...rest] = [10, 20, 30, 40, 50];
-console.log(first);  // 10
-console.log(second); // 20
-console.log(rest);   // [30, 40, 50]
-```
-
----
-
-### 🗂️ Objects — Deep Dive
-
-Objects store **key-value pairs** representing real-world entities.
-
-```js
-let student = {
-  name: "Marta",
-  age: 21,
-  isEnrolled: true,
-  grades: [90, 85, 92],
-  address: {
-    city: "Addis Ababa",
-    country: "Ethiopia"
-  }
-};
-```
-
-#### Accessing Properties
-
-```js
-// Dot notation (preferred)
-console.log(student.name);             // "Marta"
-console.log(student.address.city);     // "Addis Ababa"
-
-// Bracket notation (use when key is dynamic or has spaces)
-let key = "name";
-console.log(student[key]);             // "Marta"
-console.log(student["isEnrolled"]);    // true
-```
-
-#### Modifying Objects
-
-```js
-student.age = 22;                   // Update existing
-student.email = "marta@email.com";  // Add new property
-delete student.isEnrolled;          // Remove property
-```
-
-#### Useful Object Methods
-
-```js
-let person = { name: "Abel", age: 25, city: "Hawassa" };
-
-Object.keys(person);    // ["name", "age", "city"]
-Object.values(person);  // ["Abel", 25, "Hawassa"]
-Object.entries(person); // [["name","Abel"], ["age",25], ["city","Hawassa"]]
-```
-
-#### Destructuring Objects
-
-```js
-let { name, age, city = "Unknown" } = person;
-console.log(name); // "Abel"
-console.log(age);  // 25
-console.log(city); // "Hawassa"
-```
-
-#### Spread Operator with Objects
-
-```js
-let defaults = { theme: "dark", language: "en", fontSize: 14 };
-let userSettings = { ...defaults, language: "am", fontSize: 16 };
-// { theme: "dark", language: "am", fontSize: 16 }
-```
-
----
-
-## 8 — ES6+ Features
-
-ES6 (released in 2015) and later versions brought major improvements. These are the features you'll use **every single day** as a developer.
-
----
-
-### 🏹 Arrow Functions
-
-Shorter function syntax. When the body is a single expression, `{}` and `return` are optional:
-
-```js
-// Traditional
-function square(n) { return n * n; }
-
-// Arrow — full
-const square = (n) => { return n * n; };
-
-// Arrow — shorthand (single expression)
-const square = n => n * n;
-
-console.log(square(5)); // 25
-```
-
-> ⚠️ Arrow functions don't have their own `this`. This matters in object methods — covered in Node.js section.
-
----
-
-### 📝 Template Literals
-
-Cleaner string formatting using backticks:
-
-```js
-let name = "Dawit";
-let score = 95;
-
-// Old way
-console.log("Hello " + name + ", your score is " + score);
-
-// Template literal
-console.log(`Hello ${name}, your score is ${score}`);
-
-// Multi-line (impossible with regular strings)
-let html = `
-  <div>
-    <h1>${name}</h1>
-    <p>Score: ${score}</p>
-  </div>
-`;
-```
-
----
-
-### 📦 Destructuring
-
-Extract values from arrays and objects cleanly:
-
-```js
-// Array destructuring
-let [a, b, c] = [1, 2, 3];
-console.log(a, b, c); // 1 2 3
-
-// Object destructuring
-let { firstName, lastName, age } = { firstName: "Hana", lastName: "Tekle", age: 22 };
-console.log(firstName); // "Hana"
-
-// Rename while destructuring
-let { firstName: fName } = { firstName: "Hana" };
-console.log(fName); // "Hana"
-
-// Default values
-let { role = "user" } = { firstName: "Hana" };
-console.log(role); // "user"
-```
-
----
-
-### 🌊 Spread & Rest Operators (`...`)
-
-Same syntax (`...`), different contexts:
-
-```js
-// SPREAD — expands an array/object
-let nums = [1, 2, 3];
-let moreNums = [...nums, 4, 5, 6]; // [1, 2, 3, 4, 5, 6]
-
-let obj1 = { a: 1 };
-let obj2 = { ...obj1, b: 2 };      // { a: 1, b: 2 }
-
-// REST — collects remaining items into an array
-function sum(...numbers) {
-  return numbers.reduce((total, n) => total + n, 0);
-}
-console.log(sum(1, 2, 3, 4, 5)); // 15
-```
-
----
-
-### 🔢 Default Parameters
-
-Provide fallback values if an argument isn't passed:
-
-```js
-function greet(name = "stranger", greeting = "Hello") {
-  return `${greeting}, ${name}!`;
-}
-
-console.log(greet("Marta", "Hey")); // "Hey, Marta!"
-console.log(greet("Marta"));        // "Hello, Marta!"
-console.log(greet());               // "Hello, stranger!"
-```
-
----
-
-### 📋 Enhanced Object Literals
-
-```js
-let name = "Yonas";
-let age = 24;
-
-// Old way
-let student = { name: name, age: age };
-
-// ES6 shorthand — when key and variable name match
-let student = { name, age };
-console.log(student); // { name: "Yonas", age: 24 }
-
-// Method shorthand
-let obj = {
-  greet() {             // instead of greet: function() {}
-    return "Hello!";
-  }
-};
-```
-
----
-
-### 📦 Modules (import / export)
-
-Split your code across files and share between them:
-
-```js
-// math.js — named exports
-export function add(a, b) { return a + b; }
-export function subtract(a, b) { return a - b; }
-export const PI = 3.14159;
-
-// main.js — named imports
-import { add, subtract, PI } from './math.js';
-console.log(add(2, 3)); // 5
-
-// Default export (one per file)
-export default function multiply(a, b) { return a * b; }
-
-// Default import (any name works)
-import multiply from './math.js';
-```
-
-> 💡 In Node.js you'll also see `module.exports` and `require()` — the CommonJS system. ES modules (`import`/`export`) are the modern standard.
-
----
-
-## 9 — Asynchronous JavaScript
-
-### ⏳ Why Asynchronous?
-
-JavaScript is **single-threaded** — it can only do one thing at a time. But real applications need to:
-- Fetch data from a database (takes time)
-- Read a file from disk (takes time)
-- Call an external API (takes time)
-
-If JavaScript **waited** (blocked) for each of these, your app would freeze. That's where asynchronous code comes in.
-
-```
-SYNCHRONOUS (blocking):
-─────────────────────────────────────────────
-Task 1 ████████ | Task 2 ████████ | Task 3 ██
-                                              → Total: 3x time
-
-ASYNCHRONOUS (non-blocking):
-─────────────────────────────────────────────
-Task 1 ████░░░░
-Task 2    ████░░░░       → All start, finish when ready
-Task 3       ████░░░░
-```
-
----
-
-### 🔄 The Event Loop
-
-JavaScript handles async through the **Event Loop**:
-
-```
-┌─────────────────────────────────────┐
-│           Call Stack                │  ← Runs your code (one at a time)
-├─────────────────────────────────────┤
-│           Web APIs / Node APIs      │  ← Handles async tasks (timers, fetch, fs)
-├─────────────────────────────────────┤
-│           Callback Queue            │  ← Async results wait here
-├─────────────────────────────────────┤
-│           Event Loop                │  ← Moves callbacks to stack when stack is empty
-└─────────────────────────────────────┘
-```
-
-**Simple illustration:**
-
-```js
-console.log("1 - Start");
-
-setTimeout(() => {
-  console.log("3 - Inside timeout (async)");
-}, 0); // Even 0ms delay is async!
-
-console.log("2 - End");
-
-// Output:
-// 1 - Start
-// 2 - End
-// 3 - Inside timeout (async)  ← runs AFTER synchronous code finishes
-```
-
-> 🧠 Even with a 0ms timeout, the callback goes to the callback queue and only runs after the current synchronous code finishes. This is the event loop in action.
-
----
-
-### 📞 Callbacks (Old Way)
-
-Before Promises, async was handled with **callback functions** — functions passed as arguments to be called later:
-
-```js
-function fetchUserData(userId, callback) {
-  setTimeout(() => {
-    // Simulating a database call
-    const user = { id: userId, name: "Marta" };
-    callback(null, user); // null = no error, user = result
-  }, 1000);
-}
-
-fetchUserData(1, (error, user) => {
-  if (error) {
-    console.log("Error:", error);
-    return;
-  }
-  console.log("User:", user.name); // "Marta" (after 1 second)
-});
-```
-
-**The problem — Callback Hell 😱:**
-
-```js
-// Each step depends on the previous — leads to deeply nested code
-getUser(id, (err, user) => {
-  getPosts(user.id, (err, posts) => {
-    getComments(posts[0].id, (err, comments) => {
-      getLikes(comments[0].id, (err, likes) => {
-        // 😱 The pyramid of doom
-      });
-    });
-  });
-});
-```
-
-This is hard to read, hard to debug, and hard to maintain. Promises were created to solve this.
-
----
-
-## 10 — Promises
-
-### 🤝 What is a Promise?
-
-A Promise is an object that represents the **eventual result** of an async operation. It's a guarantee: "I don't have the result yet, but I promise I'll give it to you when it's ready — whether it succeeds or fails."
-
-**A Promise has three states:**
-
-```
-┌──────────┐      resolves      ┌──────────┐
-│ PENDING  │ ─────────────────→ │ FULFILLED│
-│          │                    │ (success)│
-│ (waiting)│ ─────────────────→ ├──────────┤
-└──────────┘      rejects       │ REJECTED │
-                                │ (failure)│
-                                └──────────┘
-```
-
----
-
-### Creating a Promise
-
-```js
-const myPromise = new Promise((resolve, reject) => {
-  // Simulating an async operation (like a database query)
-  const success = true;
-
-  if (success) {
-    resolve("Data fetched successfully! ✅"); // fulfilled
-  } else {
-    reject("Something went wrong ❌");        // rejected
-  }
-});
-```
-
----
-
-### Consuming a Promise with `.then()` and `.catch()`
-
-```js
-myPromise
-  .then(result => {
-    console.log(result); // "Data fetched successfully! ✅"
-  })
-  .catch(error => {
-    console.log(error);  // "Something went wrong ❌"
-  })
-  .finally(() => {
-    console.log("Promise settled — success or fail."); // always runs
-  });
-```
-
----
-
-### Promise Chaining — solving callback hell
-
-```js
-fetchUser(1)
-  .then(user => fetchPosts(user.id))      // each .then receives the result of the last
-  .then(posts => fetchComments(posts[0].id))
-  .then(comments => console.log(comments))
-  .catch(error => console.log("Error:", error)); // one catch handles all errors
-```
-
-Much cleaner than nested callbacks!
-
----
-
-### Promise.all — run multiple promises at once
-
-```js
-const promise1 = fetch('/api/users');
-const promise2 = fetch('/api/posts');
-const promise3 = fetch('/api/comments');
-
-Promise.all([promise1, promise2, promise3])
-  .then(([users, posts, comments]) => {
-    // All three completed successfully
-    console.log(users, posts, comments);
-  })
-  .catch(error => {
-    // If ANY promise fails, this catch runs
-    console.log("One failed:", error);
-  });
-```
-
-> ✅ `Promise.all` runs all promises **in parallel** — much faster than running them one after another.
-
----
-
-### Other Promise Methods
-
-| Method | Behavior |
-|---|---|
-| `Promise.all()` | Waits for ALL to succeed. Fails if any fails |
-| `Promise.allSettled()` | Waits for ALL to finish (regardless of success/fail) |
-| `Promise.race()` | Resolves/rejects as soon as the **first** one settles |
-| `Promise.any()` | Resolves as soon as **any one** succeeds |
-
----
-
-## 11 — Async / Await
-
-### ✨ What is Async/Await?
-
-Async/Await is **syntactic sugar on top of Promises** — it lets you write async code that *looks* and *reads* like synchronous code. No more chains of `.then()`.
-
-- `async` — marks a function as asynchronous (it automatically returns a Promise)
-- `await` — pauses the function execution until the Promise resolves
-
-```js
-// With Promises (.then chain)
-function loadUser() {
-  return fetchUser(1)
-    .then(user => fetchPosts(user.id))
-    .then(posts => console.log(posts))
-    .catch(err => console.log(err));
-}
-
-// With Async/Await (same thing, reads like normal code)
-async function loadUser() {
-  try {
-    const user  = await fetchUser(1);       // wait for user
-    const posts = await fetchPosts(user.id); // wait for posts
-    console.log(posts);
-  } catch (err) {
-    console.log(err);
-  }
-}
-```
-
----
-
-### Error Handling with try/catch
-
-```js
-async function getUserData(userId) {
-  try {
-    const response = await fetch(`https://api.example.com/users/${userId}`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json(); // await the json parsing too
-    console.log(data);
-    return data;
-
-  } catch (error) {
-    console.error("Failed to fetch user:", error.message);
-  }
-}
-
-getUserData(1);
-```
-
----
-
-### Real Backend Example (Node.js Preview)
-
-Here's a taste of how you'll use async/await every day in backend development:
-
-```js
-// Reading a file asynchronously in Node.js
-const fs = require('fs').promises;
-
-async function readConfig() {
-  try {
-    const content = await fs.readFile('./config.json', 'utf8');
-    const config  = JSON.parse(content);
-    console.log("Database host:", config.dbHost);
-  } catch (error) {
-    console.error("Could not read config:", error.message);
-  }
-}
-
-readConfig();
-```
-
----
-
-### Parallel Execution with Async/Await
-
-```js
-async function loadDashboard() {
-  try {
-    // ❌ Sequential — slow (waits for each one)
-    const user    = await getUser();
-    const posts   = await getPosts();
-    const notifs  = await getNotifications();
-
-    // ✅ Parallel — fast (all run at the same time)
-    const [user, posts, notifs] = await Promise.all([
-      getUser(),
-      getPosts(),
-      getNotifications()
-    ]);
-
-    console.log(user, posts, notifs);
-  } catch (error) {
-    console.error(error);
-  }
-}
-```
-
-> 💡 Use `Promise.all` with `await` when your async operations don't depend on each other. It can dramatically speed up your code.
-
----
-
-## 12 — Learning Resources
-
-### 📺 YouTube — Watch & Learn
-
-| Resource | Best For |
-|---|---|
-| [JavaScript Full Course – freeCodeCamp](https://www.youtube.com/watch?v=PkZNo7MFNFg) | Complete beginner foundation (3 hrs) |
-| [JavaScript Crash Course – Traversy Media](https://www.youtube.com/watch?v=hdI2bqOjy3c) | Quick practical overview |
-| [Async JS – The Net Ninja](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jx2TTZk3IGWKSbtugYdrlu) | Callbacks, Promises, Async/Await |
-| [JS Event Loop – Philip Roberts (JSConf)](https://www.youtube.com/watch?v=8aGhZQkoFbQ) | Best explanation of the event loop |
-| [ES6+ Features – Traversy Media](https://www.youtube.com/watch?v=NCwa_xi0Uuc) | Modern JS features |
-| [Promises – Web Dev Simplified](https://www.youtube.com/watch?v=DHvZLI7Db8E) | Promises explained clearly |
-
----
-
-### 📚 Official Documentation
-
-| Resource | Link |
-|---|---|
-| MDN Web Docs (JavaScript) | [developer.mozilla.org/en-US/docs/Web/JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) |
-| JavaScript.info | [javascript.info](https://javascript.info) — Best structured guide for beginners |
-| ECMAScript Specification | [tc39.es/ecma262](https://tc39.es/ecma262) — The official language specification |
-| Node.js Docs | [nodejs.org/en/docs](https://nodejs.org/en/docs) |
-
----
-
-### 📖 Articles & Guides
-
-| Article | Topic |
-|---|---|
-| [You Don't Know JS (free book series)](https://github.com/getify/You-Dont-Know-JS) | Deep dive into JS internals |
-| [Event Loop — MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop) | How the event loop works |
-| [Promises/A+ Spec](https://promisesaplus.com/) | The Promise specification |
-| [freeCodeCamp JS Handbook](https://www.freecodecamp.org/news/the-complete-javascript-handbook-f26b2c71719c/) | Complete reference |
-| [Eloquent JavaScript (free book)](https://eloquentjavascript.net/) | Best free JS book for beginners |
-
----
-
-### 🛠️ Practice Platforms
-
-| Platform | What You Get |
-|---|---|
-| [freeCodeCamp](https://www.freecodecamp.org) | Free structured JS curriculum with projects |
-| [Codecademy JavaScript](https://www.codecademy.com/learn/introduction-to-javascript) | Interactive in-browser exercises |
-| [JavaScript30](https://javascript30.com) | 30 projects in 30 days — free |
-| [Exercism.io](https://exercism.io/tracks/javascript) | Code challenges with mentor feedback |
-| [LeetCode](https://leetcode.com) | Algorithm challenges in JavaScript |
-
----
-
-## 13 — Quick Knowledge Check
-
-Test yourself — try to answer without looking back first:
-
-**Variables & Types**
-1. What is the difference between `let`, `const`, and `var`?
-2. What does "passed by reference" mean? Give a code example.
-3. What is the difference between `undefined` and `null`?
-4. What does `typeof null` return? (This is a famous JS quirk 🙂)
-
-**Operators & Control Flow**
-5. What does `===` check that `==` does not?
-6. What is `NaN` and when does it appear?
-7. What happens if you forget `break` in a `switch` statement?
-8. When would you use `do...while` instead of `while`?
-
-**Functions & Arrays**
-9. What is the difference between a **parameter** and an **argument**?
-10. What does a function return when there is no `return` statement?
-11. What is the difference between `push()` and `unshift()`?
-12. What do `map()`, `filter()`, and `reduce()` each do?
-
-**ES6+ & Async**
-13. What is the difference between **spread** and **rest** operators?
-14. Why was async/await introduced if Promises already existed?
-15. What happens if you `await` multiple independent calls sequentially instead of using `Promise.all`?
-16. What are the three states of a Promise?
-
----
-
-> 🎯 **You've completed Module 01!**
->
-> Move to **[Module 02 — Node.js Fundamentals →](../02-NodeJS-Fundamentals/README.md)**
->
-> You now have the complete JavaScript foundation needed to understand how Node.js works. Let's take your skills to the server! 🚀
+Executes the block first, then checks the condition.
+Ensures at least one execution.
+Ternary Operator or Conditional Operator
+In some programming languages, a ternary operator is used to assign a value to a variable based on a condition.
+
+
+![alt text](.images/image-8.png)
+let a = 10;
+console.log(a === 5 ? "a is equal to 5" : "a is not equal to 5");
+
+let a = 10; assigns the value 10 to variable a.
+a === 5 ? ... : ... checks if a is strictly equal to 5.
+Returns "a is equal to 5" if true.
+Returns "a is not equal to 5" if false.
+Uses of Control Flow Statements
+Control flow statements are backbone in programming for
+
+Decision-Making: To execute specific blocks of code based on conditions (e.g., if, if...else).
+Branching: To exit loops or skip iterations (break, continue).
+Looping: To repeat tasks (for, while, do...while).
+Switching: To handle multiple conditions effectively (switch).

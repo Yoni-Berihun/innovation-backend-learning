@@ -4,6 +4,7 @@
 > - Try each exercise on your own first — open VS Code, create a `.js` file, and run it with `node filename.js`
 > - Only check the answer after you've given it a real attempt
 > - Read the explanation carefully even if you got it right — the *why* matters more than the *what*
+> - Prefer the interactive version at `exercises-toggle.html` to show/hide answers with a button
 
 ---
 
@@ -16,7 +17,7 @@
 5. [Arrays & Objects](#5--arrays--objects)
 6. [ES6+ Features](#6--es6-features)
 7. [Asynchronous JavaScript, Promises & Async/Await](#7--asynchronous-javascript-promises--asyncawait)
-
+8. [Interview Questions](#8--interview-questions)
 ---
 
 ## 1 — Variables & Data Types
@@ -2175,9 +2176,1326 @@ This is essentially a simplified version of what your first Node.js REST API wil
 
 </details>
 
+## 8 — Practice Problems
+
+> 🎯 These are real coding problems. Try to solve them yourself first — the answer is hidden. Tap **"Show Answer"** only after a genuine attempt.
+
 ---
 
-> 🎯 **Exercises complete!**
+### 🟢 String Problems
+
+---
+
+**Problem 1 — Reverse a String**
+
+Write a function that takes a string and returns it reversed.
+Concept: Strings, `split`, `reverse`, `join`
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function reverseString(str) {
+  return str.split('').reverse().join('');
+}
+console.log(reverseString("hello")); // "olleh"
+```
+
+**Explanation:** `split('')` breaks the string into an array of individual characters. `reverse()` reverses the array in place. `join('')` stitches them back into a string. This is the classic one-liner — memorize it.
+
+</details>
+
+---
+
+**Problem 2 — Convert Celsius to Fahrenheit**
+
+Write a function that converts Celsius to Fahrenheit.
+Formula: `F = (C × 9/5) + 32`
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function celsiusToFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+console.log(celsiusToFahrenheit(25)); // 77
+console.log(celsiusToFahrenheit(0));  // 32
+console.log(celsiusToFahrenheit(100));// 212
+```
+
+**Explanation:** Direct application of the formula. Note operator precedence — multiplication runs before addition, so no parentheses needed around `celsius * 9/5`.
+
+</details>
+
+---
+
+**Problem 3 — Check for a Palindrome**
+
+Write a function that checks if a string is a palindrome (reads same forwards and backwards). Ignore case and non-alphanumeric characters.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function isPalindrome(str) {
+  const clean    = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const reversed = clean.split('').reverse().join('');
+  return clean === reversed;
+}
+console.log(isPalindrome("racecar")); // true
+console.log(isPalindrome("hello"));   // false
+console.log(isPalindrome("A man a plan a canal Panama")); // true
+```
+
+**Explanation:** `/[^a-z0-9]/g` is a regex that matches anything that is NOT a letter or digit — the `^` inside `[]` means "not". `replace` removes all those characters. Then we compare the cleaned string to its reverse.
+
+</details>
+
+---
+
+**Problem 4 — Count Vowels in a String**
+
+Write a function that returns the number of vowels (a, e, i, o, u) in a string.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function countVowels(str) {
+  const vowels = "aeiou";
+  let count = 0;
+  for (let char of str.toLowerCase()) {
+    if (vowels.includes(char)) count++;
+  }
+  return count;
+}
+console.log(countVowels("javascript")); // 3
+console.log(countVowels("hello"));      // 2
+
+// Alternative — one-liner with regex
+function countVowels2(str) {
+  return (str.match(/[aeiou]/gi) || []).length;
+}
+```
+
+**Explanation:** `for...of` iterates over each character. `vowels.includes(char)` checks membership. The regex alternative: `/[aeiou]/gi` matches all vowels (case-insensitive), `match` returns an array of matches or `null`, so `|| []` handles the null case.
+
+</details>
+
+---
+
+**Problem 5 — Find Maximum Number in Array**
+
+Write a function that returns the highest value in an array of numbers.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function findMax(arr) {
+  return Math.max(...arr);
+}
+console.log(findMax([1, 5, 3, 9, 2])); // 9
+
+// Without spread — for very large arrays
+function findMaxLoop(arr) {
+  let max = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > max) max = arr[i];
+  }
+  return max;
+}
+```
+
+**Explanation:** `Math.max(...arr)` uses the spread operator to pass all array elements as individual arguments. For very large arrays (100,000+ elements), use the loop version — spread can cause a stack overflow on huge arrays.
+
+</details>
+
+---
+
+**Problem 6 — Display Current Day and Time**
+
+Write a program that displays the current day and time in this format:
+```
+Today is : Tuesday.
+Current time is : 10 PM : 30 : 38
+```
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const now  = new Date();
+
+const day     = days[now.getDay()];
+let   hours   = now.getHours();
+const minutes = String(now.getMinutes()).padStart(2, '0');
+const seconds = String(now.getSeconds()).padStart(2, '0');
+const ampm    = hours >= 12 ? 'PM' : 'AM';
+hours = hours % 12 || 12; // convert 0 to 12 for midnight
+
+console.log(`Today is : ${day}.`);
+console.log(`Current time is : ${hours} ${ampm} : ${minutes} : ${seconds}`);
+```
+
+**Explanation:** `new Date()` creates a Date object for the current moment. `getDay()` returns 0–6 (Sunday–Saturday). `getHours()` returns 0–23, so we convert to 12-hour format with `hours % 12 || 12` (`|| 12` handles midnight which would be 0). `padStart(2,'0')` ensures two digits e.g. `05` not `5`.
+
+</details>
+
+---
+
+**Problem 7 — Get Current Date in Various Formats**
+
+Write a program to display the current date in `mm-dd-yyyy`, `mm/dd/yyyy`, `dd-mm-yyyy`, and `dd/mm/yyyy` formats.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+const now = new Date();
+const mm  = String(now.getMonth() + 1).padStart(2, '0'); // months are 0-indexed!
+const dd  = String(now.getDate()).padStart(2, '0');
+const yyyy = now.getFullYear();
+
+console.log(`${mm}-${dd}-${yyyy}`); // mm-dd-yyyy
+console.log(`${mm}/${dd}/${yyyy}`); // mm/dd/yyyy
+console.log(`${dd}-${mm}-${yyyy}`); // dd-mm-yyyy
+console.log(`${dd}/${mm}/${yyyy}`); // dd/mm/yyyy
+```
+
+**Explanation:** `getMonth()` returns 0–11, so we add 1 to get 1–12. `getDate()` returns the day of the month (1–31). `getFullYear()` returns the 4-digit year. `padStart(2,'0')` pads single digits with a leading zero.
+
+</details>
+
+---
+
+**Problem 8 — Calculate Area of Triangle (Sides: 5, 6, 7)**
+
+Write a program to find the area of a triangle where the three sides are 5, 6, 7. Use Heron's formula.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function triangleArea(a, b, c) {
+  const s    = (a + b + c) / 2; // semi-perimeter
+  const area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+  return area.toFixed(2);
+}
+
+console.log(triangleArea(5, 6, 7)); // "14.70"
+```
+
+**Explanation:** Heron's formula: first compute the semi-perimeter `s = (a+b+c)/2`, then `area = √(s(s−a)(s−b)(s−c))`. `Math.sqrt` computes the square root. `toFixed(2)` rounds to 2 decimal places.
+
+</details>
+
+---
+
+**Problem 9 — Check Leap Year**
+
+Write a function that determines whether a given year is a leap year in the Gregorian calendar.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function isLeapYear(year) {
+  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+console.log(isLeapYear(2000)); // true  (divisible by 400)
+console.log(isLeapYear(1900)); // false (divisible by 100 but not 400)
+console.log(isLeapYear(2024)); // true  (divisible by 4, not by 100)
+console.log(isLeapYear(2023)); // false
+```
+
+**Explanation:** A leap year is divisible by 4 — BUT century years (divisible by 100) are NOT leap years UNLESS they're also divisible by 400. So 2000 is a leap year, 1900 is not.
+
+</details>
+
+---
+
+**Problem 10 — Days Left Before Christmas**
+
+Write a program to calculate the number of days left before Christmas (Dec 25).
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function daysUntilChristmas() {
+  const now       = new Date();
+  let christmas   = new Date(now.getFullYear(), 11, 25); // month 11 = December
+
+  if (now > christmas) {
+    // Christmas has passed this year — calculate for next year
+    christmas = new Date(now.getFullYear() + 1, 11, 25);
+  }
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const diff     = Math.ceil((christmas - now) / msPerDay);
+  return diff;
+}
+
+console.log(`${daysUntilChristmas()} days until Christmas!`);
+```
+
+**Explanation:** `new Date(year, month, day)` — months are 0-indexed so December is 11. Subtracting two Date objects gives milliseconds difference. Dividing by `msPerDay` converts to days. `Math.ceil` rounds up so today still counts as 1 day.
+
+</details>
+
+---
+
+**Problem 11 — Rotate String**
+
+Write a program to rotate the string `'w3resource'` to the right — periodically remove one letter from the end and attach it to the front.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function rotateString(str, steps) {
+  const rotations = [];
+  for (let i = 0; i < steps; i++) {
+    str = str[str.length - 1] + str.slice(0, str.length - 1);
+    rotations.push(str);
+  }
+  return rotations;
+}
+
+console.log(rotateString('w3resource', 5));
+// ['ew3resourc', 'cew3resour', 'rcew3resou', 'urcew3reso', 'ourcew3res']
+```
+
+**Explanation:** Each rotation takes the last character (`str[str.length - 1]`) and prepends it to the rest (`str.slice(0, str.length - 1)`). We repeat this `steps` times, pushing each result to track the progression.
+
+</details>
+
+---
+
+**Problem 12 — Difference Between Number and 13**
+
+Write a program to get the difference between a number and 13. If the number is greater than 13, return double the absolute difference.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function diff13(n) {
+  return n > 13 ? (n - 13) * 2 : 13 - n;
+}
+
+console.log(diff13(13)); // 0
+console.log(diff13(10)); // 3
+console.log(diff13(20)); // 14  (20-13=7, doubled = 14)
+```
+
+**Explanation:** Ternary operator handles both cases cleanly. When `n > 13`, the difference is `n - 13`, doubled. Otherwise it's `13 - n`.
+
+</details>
+
+---
+
+**Problem 13 — Sum Two Integers (Triple if Equal)**
+
+Write a program to compute the sum of two integers. If they are equal, return triple their sum.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function sumOrTriple(a, b) {
+  const sum = a + b;
+  return a === b ? sum * 3 : sum;
+}
+
+console.log(sumOrTriple(1, 2)); // 3
+console.log(sumOrTriple(3, 3)); // 18  (3+3=6, tripled = 18)
+```
+
+</details>
+
+---
+
+**Problem 14 — Check if Number is Multiple of 3 or 7**
+
+Write a program to check if a positive number is a multiple of 3 or 7.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function isMultiple3or7(n) {
+  return n % 3 === 0 || n % 7 === 0;
+}
+
+console.log(isMultiple3or7(3));  // true
+console.log(isMultiple3or7(7));  // true
+console.log(isMultiple3or7(21)); // true  (multiple of both)
+console.log(isMultiple3or7(10)); // false
+```
+
+</details>
+
+---
+
+**Problem 15 — Check if String Starts with 'Java'**
+
+Write a program to check whether a string starts with 'Java'. If it does, return the string, otherwise return `'Not!'`.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function startsWithJava(str) {
+  return str.startsWith('Java') ? str : 'Not!';
+}
+
+console.log(startsWithJava('JavaScript')); // "JavaScript"
+console.log(startsWithJava('Python'));     // "Not!"
+console.log(startsWithJava('Java'));       // "Java"
+```
+
+**Explanation:** `String.prototype.startsWith(prefix)` returns `true` if the string begins with the given prefix. Clean, readable, and no regex needed.
+
+</details>
+
+---
+
+**Problem 16 — Find Largest of Three Integers**
+
+Write a function to find the largest of three integers.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function largestOfThree(a, b, c) {
+  return Math.max(a, b, c);
+}
+
+// Without Math.max:
+function largestOfThreeManual(a, b, c) {
+  if (a >= b && a >= c) return a;
+  if (b >= a && b >= c) return b;
+  return c;
+}
+
+console.log(largestOfThree(5, 10, 3));  // 10
+console.log(largestOfThree(-1, -5, 0)); // 0
+```
+
+</details>
+
+---
+
+**Problem 17 — Find Closest Value to 100**
+
+Write a program to find the closest value to 100 from two numbers. If both are equidistant, return the larger value.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function closestTo100(a, b) {
+  const diffA = Math.abs(100 - a);
+  const diffB = Math.abs(100 - b);
+  if (diffA === diffB) return Math.max(a, b);
+  return diffA < diffB ? a : b;
+}
+
+console.log(closestTo100(90, 105)); // 105  (5 away vs 10 away)
+console.log(closestTo100(80, 120)); // 120  (both 20 away — return larger)
+```
+
+**Explanation:** `Math.abs` gives the absolute distance from 100. When distances are equal, we return the larger number with `Math.max`.
+
+</details>
+
+---
+
+**Problem 18 — Swap First and Last Characters in String**
+
+Write a program to swap the first and last characters of a string. String length must be ≥ 1.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function swapFirstLast(str) {
+  if (str.length <= 1) return str;
+  return str[str.length - 1] + str.slice(1, -1) + str[0];
+}
+
+console.log(swapFirstLast("hello")); // "oellh"
+console.log(swapFirstLast("a"));     // "a"
+console.log(swapFirstLast("ab"));    // "ba"
+```
+
+**Explanation:** Build a new string: last char + everything from index 1 to second-to-last (`slice(1, -1)`) + first char. `slice(1, -1)` on a 2-char string returns an empty string, which is correct.
+
+</details>
+
+---
+
+**Problem 19 — Capitalize First Letter of Each Word**
+
+Write a program to capitalize the first letter of each word in a string.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function titleCase(str) {
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+console.log(titleCase("hello world")); // "Hello World"
+console.log(titleCase("the quick brown fox")); // "The Quick Brown Fox"
+```
+
+**Explanation:** Split by space, capitalize the first letter of each word, lowercase the rest, then rejoin. `.charAt(0).toUpperCase()` gets the first character uppercased. `.slice(1).toLowerCase()` gets the remaining characters lowercased.
+
+</details>
+
+---
+
+**Problem 20 — Reverse Alphabetical Order (a→z, z→a)**
+
+Write a program where `a` turns into `z`, `b` into `y`, ..., `z` into `a`. (Mirror the alphabet.)
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function mirrorAlphabet(str) {
+  return str.split('').map(char => {
+    if (char >= 'a' && char <= 'z') {
+      return String.fromCharCode(219 - char.charCodeAt(0));
+      // 'a'=97, 'z'=122. 97+122=219. So 219-97=122='z', 219-122=97='a'
+    }
+    return char;
+  }).join('');
+}
+
+console.log(mirrorAlphabet("hello")); // "svool"
+console.log(mirrorAlphabet("abc"));   // "zyx"
+```
+
+**Explanation:** `charCodeAt(0)` gets the ASCII code of a character. `String.fromCharCode` converts back. The magic number 219 = 97 ('a') + 122 ('z'). Subtracting any letter's code from 219 gives its mirror.
+
+</details>
+
+---
+
+**Problem 21 — Sort Letters Alphabetically in String**
+
+Write a program to sort the letters of a string alphabetically.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function sortLetters(str) {
+  return str.split('').sort().join('');
+}
+
+console.log(sortLetters("javascript")); // "aacijprstv"
+console.log(sortLetters("hello"));      // "ehllo"
+```
+
+</details>
+
+---
+
+**Problem 22 — Count Equal Number of 'p's and 't's**
+
+Write a program to check if a string contains an equal number of `p`s and `t`s.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function equalPT(str) {
+  const countP = (str.match(/p/g) || []).length;
+  const countT = (str.match(/t/g) || []).length;
+  return countP === countT;
+}
+
+console.log(equalPT("ptpt"));   // true  (2p, 2t)
+console.log(equalPT("ppt"));    // false (2p, 1t)
+console.log(equalPT("apple"));  // false (1p, 0t)
+```
+
+</details>
+
+---
+
+**Problem 23 — Remove Characters Appearing More Than Once**
+
+Write a program to remove all characters from a string that appear more than once.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function removeRepeated(str) {
+  return str.split('').filter((char, index, arr) =>
+    arr.indexOf(char) === arr.lastIndexOf(char)
+  ).join('');
+}
+
+console.log(removeRepeated("hello"));      // "he" — l and o appear once... wait
+// h=1, e=1, l=2, o=1 → remove l → "heo"
+console.log(removeRepeated("programming")); // chars that appear exactly once
+```
+
+**Explanation:** `indexOf(char) === lastIndexOf(char)` is true only when a character appears exactly once — its first occurrence is also its last.
+
+</details>
+
+---
+
+**Problem 24 — Replace First Digit in String with $**
+
+Write a program to replace the first digit in a string with the `$` character. The string must have at least one digit.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function replaceFirstDigit(str) {
+  return str.replace(/\d/, '$');
+}
+
+console.log(replaceFirstDigit("ab12cd"));  // "ab$2cd"
+console.log(replaceFirstDigit("hello5"));  // "hello$"
+```
+
+**Explanation:** `/\d/` matches the first digit (no `g` flag = first match only). `replace` substitutes it with `$`. Note: `$` is a special character in `replace` patterns, but here it works because `$` alone isn't a special replacement pattern.
+
+</details>
+
+---
+
+**Problem 25 — Check if Last Digit of Three Numbers is Same**
+
+Write a program to check whether the last digit of three positive integers is the same.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function sameLastDigit(a, b, c) {
+  return (a % 10 === b % 10) && (b % 10 === c % 10);
+}
+
+console.log(sameLastDigit(23, 13, 3));  // true  (all end in 3)
+console.log(sameLastDigit(21, 22, 23)); // false
+```
+
+</details>
+
+---
+
+### 🟡 Array Problems
+
+---
+
+**Problem 26 — Find the Longest String in an Array**
+
+Write a function to find the longest string in an array.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function longestString(arr) {
+  return arr.reduce((longest, str) =>
+    str.length > longest.length ? str : longest
+  , '');
+}
+
+console.log(longestString(["cat", "elephant", "dog", "hippopotamus"])); // "hippopotamus"
+```
+
+**Explanation:** `reduce` tracks the longest seen so far. For each string, if it's longer than the current champion, it becomes the new champion. Starting with `''` handles empty arrays gracefully.
+
+</details>
+
+---
+
+**Problem 27 — Find Largest Even Number in Array**
+
+Write a program to get the largest even number from an array of integers.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function largestEven(arr) {
+  const evens = arr.filter(n => n % 2 === 0);
+  return evens.length > 0 ? Math.max(...evens) : null;
+}
+
+console.log(largestEven([1, 3, 5, 8, 6, 2])); // 8
+console.log(largestEven([1, 3, 5]));           // null (no evens)
+```
+
+</details>
+
+---
+
+**Problem 28 — Swap First and Last Elements in Array**
+
+Write a program to swap the first and last elements of an array. Length must be ≥ 1.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function swapEnds(arr) {
+  if (arr.length <= 1) return arr;
+  const result = [...arr]; // don't mutate the original
+  [result[0], result[result.length - 1]] = [result[result.length - 1], result[0]];
+  return result;
+}
+
+console.log(swapEnds([1, 2, 3, 4, 5])); // [5, 2, 3, 4, 1]
+console.log(swapEnds([10, 20]));         // [20, 10]
+```
+
+**Explanation:** Destructuring assignment `[a, b] = [b, a]` swaps two variables without a temp variable. We spread into `result` first to avoid mutating the original array.
+
+</details>
+
+---
+
+**Problem 29 — Rotate Elements Left in Array (Length 3)**
+
+Write a program to rotate elements left in an array of length 3.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function rotateLeft(arr) {
+  return [...arr.slice(1), arr[0]];
+}
+
+console.log(rotateLeft([10, 20, 30])); // [20, 30, 10]
+
+// General version — rotate any array left by n steps
+function rotateLeftN(arr, n = 1) {
+  const steps = n % arr.length;
+  return [...arr.slice(steps), ...arr.slice(0, steps)];
+}
+console.log(rotateLeftN([1, 2, 3, 4, 5], 2)); // [3, 4, 5, 1, 2]
+```
+
+</details>
+
+---
+
+**Problem 30 — Create Array with Middle Elements from Two Arrays**
+
+Write a program to create an array taking the middle element from two arrays of length 3.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function middleElements(arr1, arr2) {
+  return [arr1[1], arr2[1]];
+}
+
+console.log(middleElements([1, 2, 3], [4, 5, 6])); // [2, 5]
+```
+
+</details>
+
+---
+
+**Problem 31 — Find Most Frequent Number in Array**
+
+Write a program to find the number appearing most frequently in an array.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function mostFrequent(arr) {
+  const freq = {};
+  arr.forEach(n => freq[n] = (freq[n] || 0) + 1);
+
+  return Object.entries(freq).reduce((best, [num, count]) =>
+    count > best.count ? { num: Number(num), count } : best
+  , { num: null, count: 0 }).num;
+}
+
+console.log(mostFrequent([1, 3, 2, 3, 5, 3, 2])); // 3
+console.log(mostFrequent([1, 1, 2, 2, 3]));         // 1 (first with max freq)
+```
+
+**Explanation:** Build a frequency map using an object. Then find the key with the highest count using `reduce`. `Object.entries` gives `[key, value]` pairs. Object keys are always strings, so we convert back with `Number(num)`.
+
+</details>
+
+---
+
+**Problem 32 — Find Maximum Difference Between Adjacent Elements**
+
+Write a program to find the maximum difference between any two adjacent elements of an array.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function maxAdjacentDiff(arr) {
+  let max = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    const diff = Math.abs(arr[i + 1] - arr[i]);
+    if (diff > max) max = diff;
+  }
+  return max;
+}
+
+console.log(maxAdjacentDiff([1, 2, 10, 3])); // 8  (|10-2|=8)
+console.log(maxAdjacentDiff([5, 1, 4, 2]));  // 4  (|1-5|=4)
+```
+
+</details>
+
+---
+
+**Problem 33 — Sum of Absolute Differences of Consecutive Numbers**
+
+Write a program to compute the sum of absolute differences of consecutive numbers in an array.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function sumAbsoluteDiffs(arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    sum += Math.abs(arr[i + 1] - arr[i]);
+  }
+  return sum;
+}
+
+console.log(sumAbsoluteDiffs([1, 3, 7, 2])); // |3-1| + |7-3| + |2-7| = 2+4+5 = 11
+```
+
+</details>
+
+---
+
+**Problem 34 — Count Inversions in Array**
+
+Write a program to count inversions in an array. Two elements form an inversion if `arr[i] > arr[j]` and `i < j`.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function countInversions(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] > arr[j]) count++;
+    }
+  }
+  return count;
+}
+
+console.log(countInversions([3, 1, 2])); // 2  → (3,1) and (3,2)
+console.log(countInversions([1, 2, 3])); // 0  → already sorted
+console.log(countInversions([3, 2, 1])); // 3  → (3,2),(3,1),(2,1)
+```
+
+**Explanation:** An inversion is a pair that is out of order. The brute-force O(n²) approach checks every pair. For large arrays a merge-sort approach runs O(n log n), but for learning purposes the nested loop is clearest.
+
+</details>
+
+---
+
+**Problem 35 — Find kth Greatest Element**
+
+Write a program to find the kth greatest element in an array of integers.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function kthGreatest(arr, k) {
+  const sorted = [...arr].sort((a, b) => b - a); // descending
+  return sorted[k - 1];
+}
+
+console.log(kthGreatest([3, 1, 4, 1, 5, 9, 2], 1)); // 9  (1st greatest)
+console.log(kthGreatest([3, 1, 4, 1, 5, 9, 2], 3)); // 4  (3rd greatest)
+```
+
+**Explanation:** Sort descending (largest first), then return the element at index `k-1`. We use `[...arr]` to avoid mutating the original. The comparator `(a, b) => b - a` sorts numerically in descending order.
+
+</details>
+
+---
+
+**Problem 36 — Create Prefix Sum Array**
+
+Write a program to create an array of prefix sums. `y[i] = x[0] + x[1] + ... + x[i]`
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function prefixSum(arr) {
+  const result = [];
+  let sum = 0;
+  for (const n of arr) {
+    sum += n;
+    result.push(sum);
+  }
+  return result;
+}
+
+console.log(prefixSum([1, 2, 3, 4])); // [1, 3, 6, 10]
+
+// One-liner with reduce
+const prefixSum2 = arr => arr.reduce((acc, n) => {
+  acc.push((acc[acc.length - 1] || 0) + n);
+  return acc;
+}, []);
+```
+
+**Explanation:** Each element in the result is the running total up to that index. Prefix sums are widely used in competitive programming for range sum queries — once built, any subarray sum `arr[i..j]` can be computed in O(1) as `prefix[j] - prefix[i-1]`.
+
+</details>
+
+---
+
+**Problem 37 — Find Max Sum of k Consecutive Numbers**
+
+Write a program to find the maximum possible sum of k consecutive numbers in an array.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function maxKConsecutiveSum(arr, k) {
+  // Sliding window — O(n)
+  let windowSum = arr.slice(0, k).reduce((a, b) => a + b, 0);
+  let maxSum    = windowSum;
+
+  for (let i = k; i < arr.length; i++) {
+    windowSum += arr[i] - arr[i - k]; // add new element, remove oldest
+    if (windowSum > maxSum) maxSum = windowSum;
+  }
+  return maxSum;
+}
+
+console.log(maxKConsecutiveSum([1, 4, 2, 10, 2, 3, 1, 0, 20], 4)); // 24 (2+10+2+3? No: 10+2+3+1? 
+// let's trace: window sums: [1+4+2+10]=17, [4+2+10+2]=18, [2+10+2+3]=17, [10+2+3+1]=16, [2+3+1+0]=6, [3+1+0+20]=24 → 24
+```
+
+**Explanation:** The **sliding window** technique avoids recomputing the sum from scratch for every window. Instead, each step adds the new element entering the window and subtracts the element leaving it. This gives O(n) time instead of O(n×k).
+
+</details>
+
+---
+
+**Problem 38 — Check if Array is Permutation of 1 to n**
+
+Write a program to check if an array of integers is a permutation of numbers from 1 to n.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function isPermutation1toN(arr) {
+  const n = arr.length;
+  const sorted = [...arr].sort((a, b) => a - b);
+  return sorted.every((val, idx) => val === idx + 1);
+}
+
+console.log(isPermutation1toN([3, 1, 2]));    // true
+console.log(isPermutation1toN([1, 2, 4]));    // false (missing 3, has 4)
+console.log(isPermutation1toN([1, 1, 2]));    // false (duplicate)
+```
+
+</details>
+
+---
+
+### 🔴 Advanced / Algorithmic Problems
+
+---
+
+**Problem 39 — Number of Trailing Zeros in Factorial**
+
+Write a program to find the number of trailing zeros in `n!`.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function trailingZerosFactorial(n) {
+  let count = 0;
+  while (n >= 5) {
+    n = Math.floor(n / 5);
+    count += n;
+  }
+  return count;
+}
+
+console.log(trailingZerosFactorial(5));  // 1  (5! = 120)
+console.log(trailingZerosFactorial(10)); // 2  (10! = 3628800)
+console.log(trailingZerosFactorial(25)); // 6
+```
+
+**Explanation:** Trailing zeros come from factors of 10 = 2 × 5. Since there are always more 2s than 5s in a factorial, we just count factors of 5. Every multiple of 5 contributes one factor, every multiple of 25 contributes an extra, etc. The while loop counts all of them efficiently without computing the actual factorial.
+
+</details>
+
+---
+
+**Problem 40 — Find Distinct Prime Factors**
+
+Write a program to find all distinct prime factors of a given integer.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function primeFactors(n) {
+  const factors = [];
+  for (let d = 2; d * d <= n; d++) {
+    if (n % d === 0) {
+      factors.push(d);
+      while (n % d === 0) n = Math.floor(n / d); // remove all copies of d
+    }
+  }
+  if (n > 1) factors.push(n); // remaining n is a prime factor
+  return factors;
+}
+
+console.log(primeFactors(12));  // [2, 3]
+console.log(primeFactors(100)); // [2, 5]
+console.log(primeFactors(13));  // [13]  (prime)
+```
+
+**Explanation:** We test divisibility for each `d` from 2 upward. If `n` is divisible by `d`, we add it to factors and divide out all copies of `d`. We only need to go up to `√n` because if `n` has a factor larger than `√n`, its co-factor must be smaller. Any `n > 1` remaining after the loop is itself a prime factor.
+
+</details>
+
+---
+
+**Problem 41 — Replace $ in Expression to Make True**
+
+Write a program to check whether it is possible to replace `$` in expression `x $ y = z` with `+`, `-`, `*`, or `/` to obtain a correct expression.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function findOperator(x, y, z) {
+  if (x + y === z) return '+';
+  if (x - y === z) return '-';
+  if (x * y === z) return '*';
+  if (y !== 0 && x / y === z) return '/';
+  return 'No valid operator found';
+}
+
+console.log(findOperator(10, 30, 300)); // "*"  (10 * 30 = 300)
+console.log(findOperator(10, 5, 2));    // "/"  (10 / 5 = 2)
+console.log(findOperator(5, 3, 8));     // "+"  (5 + 3 = 8)
+```
+
+</details>
+
+---
+
+**Problem 42 — Dot Product of Two 3D Vectors**
+
+Write a program to create the dot product of two 3D vectors.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function dotProduct(v1, v2) {
+  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+}
+
+// Generic version for any length
+function dotProductN(v1, v2) {
+  return v1.reduce((sum, val, i) => sum + val * v2[i], 0);
+}
+
+console.log(dotProduct([1, 2, 3], [4, 5, 6])); // 1*4 + 2*5 + 3*6 = 4+10+18 = 32
+```
+
+**Explanation:** The dot product multiplies corresponding elements and sums them. It's used everywhere in graphics, machine learning (neural network weights), and physics. The generic `reduce` version works for any vector length.
+
+</details>
+
+---
+
+**Problem 43 — Validate with Luhn Algorithm**
+
+Write a program to validate a credit card number using the Luhn Algorithm.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function luhnCheck(num) {
+  const digits = String(num).split('').reverse().map(Number);
+  const sum = digits.reduce((total, digit, idx) => {
+    if (idx % 2 === 1) { // every second digit from the right
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    return total + digit;
+  }, 0);
+  return sum % 10 === 0;
+}
+
+console.log(luhnCheck(4532015112830366)); // true  (valid Visa test number)
+console.log(luhnCheck(1234567890123456)); // false
+```
+
+**Explanation:** The Luhn algorithm: reverse the digits, double every second digit from the right, subtract 9 if the doubled value exceeds 9, then sum all digits. If the total is divisible by 10, it's valid. Used to validate credit card numbers, IMEI numbers, and more.
+
+</details>
+
+---
+
+**Problem 44 — Generate Random Hexadecimal Color Code**
+
+Write a program to generate a random hexadecimal color code.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function randomHexColor() {
+  return '#' + Math.floor(Math.random() * 0xFFFFFF)
+    .toString(16)
+    .padStart(6, '0');
+}
+
+console.log(randomHexColor()); // e.g. "#a3f2c1"
+console.log(randomHexColor()); // e.g. "#0b7f3d"
+```
+
+**Explanation:** `0xFFFFFF` is 16777215 in decimal (max value for a 6-digit hex color). `Math.random() * 0xFFFFFF` gives a random decimal, `Math.floor` makes it an integer, `.toString(16)` converts to hex, and `padStart(6, '0')` ensures exactly 6 characters (e.g. `f3` becomes `0000f3`).
+
+</details>
+
+---
+
+**Problem 45 — Deep Clone an Object**
+
+Write a program to create a deep clone of an object (nested objects should also be cloned, not referenced).
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+// Method 1 — JSON trick (works for plain data, no functions/Dates/undefined)
+function deepCloneJSON(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+// Method 2 — structuredClone (Node.js 17+, handles Dates, Maps, Sets)
+function deepClone(obj) {
+  return structuredClone(obj);
+}
+
+// Method 3 — recursive manual clone
+function deepCloneManual(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(deepCloneManual);
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, deepCloneManual(v)])
+  );
+}
+
+const original = { a: 1, nested: { b: 2, arr: [1, 2, 3] } };
+const clone    = deepCloneManual(original);
+clone.nested.b = 99;
+console.log(original.nested.b); // 2 — original unchanged
+```
+
+**Explanation:** The JSON method is the simplest but fails with `Date`, `undefined`, `function`, `Map`, `Set`, and circular references. `structuredClone` handles most cases and is the modern standard. The recursive manual version is educational — it handles arrays and objects but not special types.
+
+</details>
+
+---
+
+**Problem 46 — Find Median of Array**
+
+Write a program to find the median of an array of numbers.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function median(arr) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid    = Math.floor(sorted.length / 2);
+  return sorted.length % 2 !== 0
+    ? sorted[mid]
+    : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+console.log(median([1, 3, 2]));        // 2
+console.log(median([1, 2, 3, 4]));     // 2.5  ((2+3)/2)
+console.log(median([7, 1, 5, 3, 9])); // 5
+```
+
+**Explanation:** Sort the array. If odd length, the median is the middle element. If even length, it's the average of the two middle elements. We spread into a new array before sorting to avoid mutating the original.
+
+</details>
+
+---
+
+**Problem 47 — Hash String to Number**
+
+Write a program to hash a string into a whole number.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function hashString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0; // convert to 32-bit integer
+  }
+  return Math.abs(hash);
+}
+
+console.log(hashString("hello"));      // consistent number
+console.log(hashString("hello"));      // same number — deterministic
+console.log(hashString("Hello"));      // different — case sensitive
+```
+
+**Explanation:** This is the djb2 hash function. `hash << 5` shifts bits left by 5 (multiplies by 32), `- hash` makes it `hash * 31`. Adding the char code mixes in the character. `|= 0` keeps it as a 32-bit integer to prevent floating point. Hashing is used for hash maps, checksums, cache keys, and data distribution.
+
+</details>
+
+---
+
+**Problem 48 — Group Array Elements by Function**
+
+Write a program to group elements of an array based on a given function.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function groupBy(arr, fn) {
+  return arr.reduce((groups, item) => {
+    const key = fn(item);
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+    return groups;
+  }, {});
+}
+
+console.log(groupBy([1, 2, 3, 4, 5, 6], n => n % 2 === 0 ? 'even' : 'odd'));
+// { odd: [1,3,5], even: [2,4,6] }
+
+console.log(groupBy(['one','two','three','four','five'], w => w.length));
+// { 3: ['one','two'], 4: ['four','five'], 5: ['three'] }
+```
+
+**Explanation:** `reduce` builds an object where each key is a group name returned by `fn`. This is the same as Lodash's `_.groupBy` — a utility you'll implement constantly when transforming API data.
+
+</details>
+
+---
+
+**Problem 49 — Curry a Function**
+
+Write a program to curry a function — convert a function that takes multiple arguments into a sequence of functions each taking a single argument.
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    }
+    return function(...moreArgs) {
+      return curried(...args, ...moreArgs);
+    };
+  };
+}
+
+function add(a, b, c) { return a + b + c; }
+
+const curriedAdd = curry(add);
+
+console.log(curriedAdd(1)(2)(3));    // 6  — one arg at a time
+console.log(curriedAdd(1, 2)(3));    // 6  — two at once, then one
+console.log(curriedAdd(1)(2, 3));    // 6  — one, then two
+console.log(curriedAdd(1, 2, 3));    // 6  — all at once
+```
+
+**Explanation:** Currying is a fundamental functional programming concept. `fn.length` gives the number of expected arguments. If we have enough, call `fn` directly. Otherwise, return a new function that collects more arguments. This enables **partial application** — creating specialized functions from general ones: `const add5 = curriedAdd(5)`, then `add5(3)` = 8.
+
+</details>
+
+---
+
+**Problem 50 — Perform Deep Comparison Between Two Values**
+
+Write a program to deeply compare two values to check if they are equivalent (all nested properties equal).
+
+<details>
+<summary>Show Answer</summary>
+
+```js
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null) return false;
+  if (typeof a !== typeof b) return false;
+  if (typeof a !== 'object') return a === b;
+
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+
+  if (keysA.length !== keysB.length) return false;
+
+  return keysA.every(key => deepEqual(a[key], b[key]));
+}
+
+console.log(deepEqual({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 2 } })); // true
+console.log(deepEqual({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 3 } })); // false
+console.log(deepEqual([1, [2, 3]], [1, [2, 3]]));                       // true
+```
+
+**Explanation:** `===` handles primitives and same-reference objects. For different objects, we compare keys count first (fast exit), then recursively compare each key's value. Arrays are objects in JS, so `Object.keys([1,2])` returns `['0','1']` and this works for arrays too.
+
+</details>
+
+---
+
+> 🎯 **All exercises complete!**
 >
 > Move to **[Module 02 — Node.js Fundamentals →](../02-NodeJS-Fundamentals/README.md)**
 >
