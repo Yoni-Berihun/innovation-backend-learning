@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Run JavaScript & Node Snippets</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 2rem;
+    }
+    .card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+      padding: 2rem;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin: 1.25rem 0 0.5rem;
+      font-weight: 700;
+    }
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95rem;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      border-radius: 999px;
+      background: #2563eb;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .output {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 140px;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .hint {
+      margin-top: 0.75rem;
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+    .download-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Run JavaScript & Node Snippets</h1>
+    <p class="hint">Paste the note text or code block below. Choose the right mode, then run the snippet. JavaScript runs in your browser and Node mode prepares a downloadable script.</p>
+
+    <label for="mode">Execution mode</label>
+    <select id="mode">
+      <option value="browser">Browser JavaScript</option>
+      <option value="node">Node.js</option>
+    </select>
+
+    <label for="snippet">Paste your note or code snippet here</label>
+    <textarea id="snippet" placeholder="Paste a code block or JavaScript example here..."></textarea>
+
+    <button id="runBtn">Run code</button>
+    <a id="downloadLink" class="download-link" style="display:none;" download="snippet.js">Download Node script</a>
+
+    <div class="output" id="output">Output will appear here.</div>
+  </div>
+
+  <script>
+    const textarea = document.getElementById('snippet');
+    const output = document.getElementById('output');
+    const button = document.getElementById('runBtn');
+    const modeSelect = document.getElementById('mode');
+    const downloadLink = document.getElementById('downloadLink');
+    let currentBlobUrl = null;
+
+    function extractCode(input) {
+      const fenceMatch = input.match(/```([a-zA-Z0-9_-]*)\s*([\s\S]*?)```/i);
+      if (fenceMatch) {
+        return { lang: fenceMatch[1].toLowerCase(), code: fenceMatch[2].trim() };
+      }
+      const stripped = input
+        .split('\n')
+        .map(line => line.replace(/^\s*>\s?/, ''))
+        .join('\n');
+      return { lang: '', code: stripped.trim() };
+    }
+
+    function captureConsole(fn) {
+      const logs = [];
+      const originalLog = console.log;
+      console.log = (...args) => {
+        logs.push(args.map(item => typeof item === 'object'
+          ? JSON.stringify(item, null, 2)
+          : String(item)).join(' '));
+        originalLog.apply(console, args);
+      };
+      try {
+        fn();
+      } finally {
+        console.log = originalLog;
+      }
+      return logs;
+    }
+
+    function clearDownload() {
+      if (currentBlobUrl) {
+        URL.revokeObjectURL(currentBlobUrl);
+        currentBlobUrl = null;
+      }
+      downloadLink.style.display = 'none';
+      downloadLink.removeAttribute('href');
+    }
+
+    function createNodeFile(code) {
+      const wrapped = '// Generated Node.js snippet\n;(async () => {\n' + code + '\n})();\n';
+      const blob = new Blob([wrapped], { type: 'text/javascript' });
+      clearDownload();
+      currentBlobUrl = URL.createObjectURL(blob);
+      downloadLink.href = currentBlobUrl;
+      downloadLink.style.display = 'inline-block';
+      downloadLink.textContent = 'Download runnable Node script';
+    }
+
+    async function runBrowserCode(code) {
+      const logs = captureConsole(() => {
+        try {
+          const fn = new Function('console', 'return (async () => {\n' + code + '\n})();');
+          const result = fn(console);
+          if (result && typeof result.then === 'function') {
+            return result;
+          }
+          return result;
+        } catch (error) {
+          throw error;
+        }
+      });
+      return logs;
+    }
+
+    button.addEventListener('click', async () => {
+      output.textContent = '';
+      clearDownload();
+      const { code, lang } = extractCode(textarea.value);
+      const mode = modeSelect.value;
+
+      if (!code) {
+        output.textContent = 'No code found. Paste a code block or plain JavaScript snippet.';
+        return;
+      }
+
+      if (mode === 'node') {
+        createNodeFile(code);
+        output.textContent = 'Node script ready. Download it and run with `node snippet.js` in your terminal.';
+        return;
+      }
+
+      try {
+        const logs = await runBrowserCode(code);
+        if (logs.length > 0) {
+          output.textContent = logs.join('\n');
+        } else {
+          output.textContent = 'Code executed successfully. No console output was produced.';
+        }
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
