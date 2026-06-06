@@ -35,7 +35,7 @@ Create an Express server that:
 - Logs `"Server running on port 3000"` when started
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 // app.js
@@ -75,7 +75,7 @@ Create an endpoint `GET /user` that responds with this JSON:
 ```
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 app.get('/user', (req, res) => {
@@ -105,7 +105,7 @@ Create these endpoints:
 - `GET /server-error` → status 500, `{ error: "Internal error" }`
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 app.get('/ok',           (req, res) => res.status(200).json({ message: 'All good' }));
@@ -139,7 +139,7 @@ Set up a project with:
 - Server reads port from `process.env.PORT` with fallback to 3000
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```bash
 npm init -y
@@ -196,7 +196,7 @@ Create these routes:
 Test: `GET /users/42`, `GET /posts/5/comments/12`
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 app.get('/users/:id', (req, res) => {
@@ -237,7 +237,7 @@ Create `GET /search` that:
 Test: `GET /search?q=javascript&page=2&limit=5`
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 app.get('/search', (req, res) => {
@@ -280,7 +280,7 @@ Create a modular routing setup:
 - Each route returns a simple JSON response (no real DB needed)
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 // routes/products.js
@@ -361,7 +361,7 @@ Create an auth middleware that:
 Apply it only to `GET /dashboard` and `GET /settings`, not to `GET /public`.
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 const authMiddleware = (req, res, next) => {
@@ -432,7 +432,7 @@ Write a middleware that logs every request in this format:
 Log the method, path, status code, and response time.
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 const requestLogger = (req, res, next) => {
@@ -483,7 +483,7 @@ npm install morgan cors
 ```
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 const express    = require('express');
@@ -561,7 +561,7 @@ Build a complete in-memory CRUD API for `students`:
 - `DELETE /students/:id` — delete, return 204 (404 if not found)
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 const express = require('express');
@@ -658,7 +658,7 @@ npm install express-validator
 ```
 
 <details>
-<summary>✅ Answer & Explanation</summary>
+<summary>Show Answer</summary>
 
 ```js
 const { body, validationResult } = require('express-validator');
