@@ -33,6 +33,12 @@
 
 ## 1 — What is Express.js?
 
+## Exercises & Answers
+
+- The full set of exercises and answers lives in [03-ExpressJS/Exercises.md](03-ExpressJS/Exercises.md). Answers are hidden behind "Show Answer" toggles for self-testing.
+- If your Markdown preview does not execute `<script>` tags, open the file directly in the editor or copy the small toggle snippet from `03-ExpressJS/Exercises-toggle-instructions.md` into the end of `Exercises.md` to enable dynamic "Show Answer" / "Hide Answer" labels.
+
+
 Express is a **minimal and flexible web framework** built on top of Node.js. It provides a thin, organized layer on top of Node's built-in `http` module — abstracting away complexity and giving you a clean system for routing, middleware, and responses.
 
 > **"Express is the most popular HTTP server framework built upon Node.js."**
