@@ -325,6 +325,8 @@ Each layer can:
 - Balance load
 - Apply security
 
+![Layered system architecture](image-3.png)
+
 The client doesn't need to know about all these layers. It just sends a request and gets a response.
 
 ---
@@ -3398,6 +3400,8 @@ pet-shelter-api/
 └── db.js               (you create this)
 ```
 
+![API folder structure](image-2.png)
+
 ---
 
 ## Creating Your First Server
@@ -4780,6 +4784,10 @@ Hands-on: Build a working REST API with Node.js and Express:
 - WebSockets and real-time
 - API gateway patterns
 
+![Swagger API documentation example](image.png)
+
+This is the kind of interactive API docs you can build with Swagger/OpenAPI.
+
 ---
 
 ## 🎯 Learning Path Recommendations
@@ -5324,7 +5332,7 @@ The modules are detailed, the examples are real, and the exercises are practical
 
 ---
 
-**Last Updated**: January 2026
+**Last Updated**: may 2026
 **Course Status**: Complete (Modules 1-3), In Development (Modules 4-10)
 **Total Examples**: 150+
 **Total Exercises**: 50+
