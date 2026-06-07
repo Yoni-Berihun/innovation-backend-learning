@@ -1,3 +1,18 @@
+# 🟦 Module 05 — Authentication
+
+> 👋 **Welcome to Authentication!**
+> This module teaches practical authentication patterns for Node.js and Express: sessions, JWTs, refresh tokens, OAuth, MFA, and hardening techniques.
+
+---
+
+## 📖 Table of Contents
+
+1. [Understanding JWTs (JSON Web Tokens)](#understanding-jwts-json-web-tokens)
+2. [Setting Up the Project](#setting-up-the-project)
+3. [How to Implement JWT Authentication](#how-to-implement-jwt-authentication)
+4. [How to Verify JWTs and Protect Routes](#how-to-verify-jwts-and-protect-routes)
+5. [Refresh Tokens and Rotation](#refresh-tokens-and-rotation)
+6. [Conclusion](#conclusion)
 
 Authentication in Node.js with Express 
 
@@ -11,18 +26,6 @@ JWTs make it easy to verify users without constantly checking a database – but
 
 In this guide, we’ll walk through how to build a secure authentication system using JWTs and refresh tokens. You’ll learn how to generate tokens, validate them, handle expiry, and keep everything safe from common security threats.
 
-Table of Contents
-Understanding JWTs (JSON Web Tokens)
-
-Setting Up the Project
-
-How to Implement JWT Authentication
-
-How to Verify JWTs and Protect Routes
-
-Refresh Tokens and Rotation
-
-Conclusion
 
 Understanding JWTs (JSON Web Tokens)
 A JWT, short for JSON Web Token, is a compact way to share information between a client and a server. It’s often used to prove that a user is who they say they are. The token is created on the server after a user logs in and is then sent back to the client. The client then includes this token with each request, so the server knows who is making the call.
