@@ -115,6 +115,14 @@ Task:
 Test:
 - Print stored users to verify only hashed passwords are present.
 
+<details>
+<summary>Answer</summary>
+
+- Hash passwords before saving with `bcrypt.hash(password, 12)`.
+- Store only the hash and never the plaintext password.
+- Use `bcrypt.compare()` on login, and return generic 401 messages.
+</details>
+
 ### Exercise 2 — Basic JWT Issuance & Login (Beginner)
 Task:
 - Implement `/login` POST to validate credentials with `bcrypt.compare()`.
@@ -122,6 +130,14 @@ Task:
 
 Test:
 - Wrong password → HTTP 401. Correct password → JSON `{ token: "..." }`.
+
+<details>
+<summary>Answer</summary>
+
+- Verify credentials with `bcrypt.compare(password, user.passwordHash)`.
+- Sign the JWT with `jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' })`.
+- Return the token as JSON instead of sending the password.
+</details>
 
 ### Exercise 3 — Route Guard Middleware (Intermediate)
 Task:
@@ -131,6 +147,14 @@ Task:
 Test:
 - Protect `/dashboard` route; ensure requests without valid token are rejected and valid tokens pass.
 
+<details>
+<summary>Answer</summary>
+
+- Read `Authorization` header, split on `Bearer`, and verify with `jwt.verify(token, process.env.JWT_SECRET)`.
+- Attach decoded payload to `req.user`.
+- Return 401 for missing or invalid tokens.
+</details>
+
 ### Exercise 4 — Refresh Tokens & Rotation (Advanced)
 Task:
 - Return `accessToken` (15m) and `refreshToken` (7d httpOnly cookie) from `/login`.
@@ -139,6 +163,14 @@ Task:
 Test:
 - Logout should remove the refresh token from the whitelist so cookie can no longer be exchanged.
 
+<details>
+<summary>Answer</summary>
+
+- Issue a refresh token in an `httpOnly`, secure cookie.
+- Store the refresh token in a whitelist or database store.
+- On `/refresh`, verify the token, issue new access and refresh tokens, and invalidate the old refresh token.
+</details>
+
 ### Exercise 5 — MFA (Advanced)
 Task:
 - Implement `/2fa/setup` to generate a TOTP secret and provide a QR URI.
@@ -146,6 +178,14 @@ Task:
 
 Test:
 - Use an authenticator app (Google Authenticator, Authy) to verify codes.
+
+<details>
+<summary>Answer</summary>
+
+- Generate a TOTP secret and save it to the user record.
+- Use `speakeasy.totp.verify({ secret, token })` to validate codes.
+- Enable MFA only after successful verification and keep the secret secure.
+</details>
 
 ---
 
@@ -161,6 +201,14 @@ Test:
 - Login should create a session cookie.
 - Logout should destroy the session and reject access to `/profile`.
 
+<details>
+<summary>Answer</summary>
+
+- Use `express-session` with a secure store.
+- Set `req.session.userId = user.id` after login.
+- Protect `/profile` by checking `req.session.userId` and destroy the session on logout.
+</details>
+
 ### Exercise 7 — OAuth / Social Login
 Task:
 - Add Google OAuth with `passport-google-oauth20`.
@@ -170,6 +218,14 @@ Task:
 Test:
 - Visit `/auth/google` and confirm redirect to Google.
 - After authentication, ensure user data is returned or stored.
+
+<details>
+<summary>Answer</summary>
+
+- Configure Passport Google strategy.
+- Start auth at `/auth/google` and handle callback at `/auth/google/callback`.
+- In the callback, find or create the user and serialize into the session.
+</details>
 
 ### Exercise 8 — RBAC & Permissions
 Task:
@@ -181,6 +237,14 @@ Test:
 - A user with role `user` should be denied admin access.
 - A user should be allowed to update their own profile.
 
+<details>
+<summary>Answer</summary>
+
+- Create middleware that checks `req.user.role` against allowed roles.
+- Use that middleware on admin routes.
+- Add ownership logic by comparing `req.user.id` to the requested resource owner.
+</details>
+
 ### Exercise 9 — Account Lifecycle Workflows
 Task:
 - Implement `/forgot-password` and `/reset-password` routes.
@@ -190,6 +254,14 @@ Task:
 Test:
 - Request password reset and verify a token is generated.
 - Use `/reset-password` with the token and a new password.
+
+<details>
+<summary>Answer</summary>
+
+- Generate a reset token, hash it, and store it with an expiry.
+- Send the plain token via email or log it for development.
+- Verify the token at `/reset-password`, hash the new password, and clear the reset token.
+</details>
 
 ### Exercise 10 — Security Hardening
 Task:
@@ -201,63 +273,104 @@ Test:
 - Confirm `X-Powered-By` is removed and CORS policies are enforced.
 - Confirm protected responses include `Cache-Control: no-store`.
 
+<details>
+<summary>Answer</summary>
+
+- Use `helmet()` and `cors({ origin: trustedOrigin })`.
+- Add `Cache-Control: no-store` on sensitive responses.
+- Sanitize and validate request input before processing.
+</details>
+
 ---
 
 ## Sample Solutions
 
-### Solution 1 — Safe Password Storage
+<details>
+<summary>Solution 1 — Safe Password Storage</summary>
+
 - Use `bcrypt.hash(password, 12)` before saving.
 - Store only `{ email, passwordHash }` in the user store.
 - Validate with `await bcrypt.compare(req.body.password, user.passwordHash)`.
+</details>
 
-### Solution 2 — Basic JWT Issuance
+<details>
+<summary>Solution 2 — Basic JWT Issuance</summary>
+
 - On login, verify credentials with `bcrypt.compare`.
 - Sign token with `jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' })`.
 - Return `{ token }` in JSON.
+</details>
 
-### Solution 3 — Route Guard Middleware
+<details>
+<summary>Solution 3 — Route Guard Middleware</summary>
+
 - Read `Authorization` header and split on `Bearer`.
 - Use `jwt.verify(token, process.env.JWT_SECRET)`.
 - Attach decoded payload to `req.user` and call `next()`.
 - Return 401 for missing, malformed, or invalid tokens.
+</details>
 
-### Solution 4 — Refresh Token Rotation
+<details>
+<summary>Solution 4 — Refresh Token Rotation</summary>
+
 - Store refresh tokens in a whitelist or database table.
 - Issue cookie with `httpOnly`, `secure`, and `sameSite: 'lax'`.
 - On `/refresh`, verify the refresh token and replace it with a new one.
 - Delete the old refresh token from the whitelist on logout.
+</details>
 
-### Solution 5 — MFA Setup
+<details>
+<summary>Solution 5 — MFA Setup</summary>
+
 - Generate a TOTP secret and save it to the user record.
 - Return the QR URI or secret to the frontend.
 - Verify codes using `speakeasy.totp.verify({ secret, token })`.
 - Flag the user as `mfaEnabled = true` after successful verification.
+</details>
 
-### Solution 6 — Session-Based Auth
+<details>
+<summary>Solution 6 — Session-Based Auth</summary>
+
 - Use `express-session` with a secure session store.
 - On login, set `req.session.userId = user.id`.
 - Protect `/profile` with middleware that checks `req.session.userId`.
 - Call `req.session.destroy()` on logout.
+</details>
 
-### Solution 7 — OAuth / Social Login
+<details>
+<summary>Solution 7 — OAuth / Social Login</summary>
+
 - Configure Passport with `GoogleStrategy`.
 - Use `/auth/google` to start authentication and `/auth/google/callback` for the redirect.
 - In the callback, find or create a user by email and call `done(null, user)`.
 - Serialize the user into the session.
+</details>
 
-### Solution 8 — RBAC & Permissions
+<details>
+<summary>Solution 8 — RBAC & Permissions</summary>
+
 - Add a middleware `checkRole(allowedRoles)` that verifies `req.user.role`.
 - Protect admin routes with `checkRole(['admin'])`.
 - For profile updates, compare `req.user.id === req.params.id` or allow admin override.
+</details>
 
-### Solution 9 — Account Lifecycle Workflows
+<details>
+<summary>Solution 9 — Account Lifecycle Workflows</summary>
+
 - Generate a reset token and store its hash with expiration.
 - Send the unhashed token via email link or log it for test purposes.
 - Verify token on `/reset-password`, then hash the new password and clear the reset token.
 - Revoke refresh tokens connected to the user when password changes.
+</details>
 
-### Solution 10 — Security Hardening
+<details>
+<summary>Solution 10 — Security Hardening</summary>
+
 - Add `app.use(helmet())` and `app.use(cors({ origin: trustedOrigin }))`.
+- Set `Cache-Control: no-store` on protected responses.
+- Enforce strict CORS origins and remove `X-Powered-By`.
+- Validate and sanitize inputs for safety.
+</details>
 - Set `res.set('Cache-Control', 'no-store')` on sensitive routes.
 - Remove `X-Powered-By`, enable strict CORS origins, and validate/sanitize inputs.
 
