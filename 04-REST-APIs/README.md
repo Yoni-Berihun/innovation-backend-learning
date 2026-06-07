@@ -325,6 +325,8 @@ Each layer can:
 - Balance load
 - Apply security
 
+![Layered system architecture](.images/image-3.png)
+
 The client doesn't need to know about all these layers. It just sends a request and gets a response.
 
 ---
@@ -3398,6 +3400,8 @@ pet-shelter-api/
 └── db.js               (you create this)
 ```
 
+![API folder structure](.images/image-2.png)
+
 ---
 
 ## Creating Your First Server
@@ -4658,7 +4662,7 @@ This is a **comprehensive, beginner-friendly** course on REST APIs. Each module 
 ## 📚 Complete Course Structure
 
 ### **Module 1: REST Fundamentals** ✅ (COMPLETE)
-**File**: `REST_API_COURSE_MODULE_1.md`
+**File**: `REST_API_COURSE_MODULE_1`
 
 Learn the foundational concepts of REST APIs:
 - What is an API?
@@ -4677,7 +4681,7 @@ Learn the foundational concepts of REST APIs:
 - Common misconceptions clarified
 
 ### **Module 2: REST API Communication** ✅ (COMPLETE)
-**File**: `REST_API_COURSE_MODULE_2.md`
+**File**: `REST_API_COURSE_MODULE_2.`
 
 Master the technical details of API communication:
 - URLs and URI structure
@@ -4699,7 +4703,7 @@ Master the technical details of API communication:
 - 5+ practice exercises
 
 ### **Module 3: Building Your First API** ✅ (COMPLETE)
-**File**: `REST_API_COURSE_MODULE_3.md`
+**File**: `REST_API_COURSE_MODULE_3`
 
 Hands-on: Build a working REST API with Node.js and Express:
 - Setting up Node.js and npm
@@ -4779,6 +4783,10 @@ Hands-on: Build a working REST API with Node.js and Express:
 - Microservices basics
 - WebSockets and real-time
 - API gateway patterns
+
+![Swagger API documentation example](.images/image.png)
+
+This is the kind of interactive API docs you can build with Swagger/OpenAPI.
 
 ---
 
@@ -5324,7 +5332,7 @@ The modules are detailed, the examples are real, and the exercises are practical
 
 ---
 
-**Last Updated**: January 2026
+**Last Updated**: may 2026
 **Course Status**: Complete (Modules 1-3), In Development (Modules 4-10)
 **Total Examples**: 150+
 **Total Exercises**: 50+
