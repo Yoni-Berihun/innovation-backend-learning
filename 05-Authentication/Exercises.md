@@ -11,7 +11,8 @@
 
 1. [Problems & Challenges](#problems--challenges)
 2. [Exercises](#exercises)
-3. [Self-Review Quiz](#self-review-quiz)
+3. [Additional Exercises](#additional-exercises)
+4. [Self-Review Quiz](#self-review-quiz)
 
 ---
 
@@ -97,6 +98,60 @@ Task:
 
 Test:
 - Use an authenticator app (Google Authenticator, Authy) to verify codes.
+
+---
+
+## Additional Exercises
+
+### Exercise 6 — Session-Based Authentication
+Task:
+- Build an Express app using `express-session`.
+- Create `/login`, `/logout`, and `/profile` routes.
+- Store the session ID server-side and protect `/profile` with session checking.
+
+Test:
+- Login should create a session cookie.
+- Logout should destroy the session and reject access to `/profile`.
+
+### Exercise 7 — OAuth / Social Login
+Task:
+- Add Google OAuth with `passport-google-oauth20`.
+- Create `/auth/google` and `/auth/google/callback` routes.
+- On successful login, create or match a user record by email.
+
+Test:
+- Visit `/auth/google` and confirm redirect to Google.
+- After authentication, ensure user data is returned or stored.
+
+### Exercise 8 — RBAC & Permissions
+Task:
+- Add role-based middleware `checkRole(['admin', 'editor'])`.
+- Protect a route like `/admin/dashboard` so only admin access is allowed.
+- Add ownership logic so users can only edit their own profile unless admin.
+
+Test:
+- A user with role `user` should be denied admin access.
+- A user should be allowed to update their own profile.
+
+### Exercise 9 — Account Lifecycle Workflows
+Task:
+- Implement `/forgot-password` and `/reset-password` routes.
+- Generate a short-lived reset token and store a hash in the user record.
+- Invalidate existing refresh tokens when the password is reset.
+
+Test:
+- Request password reset and verify a token is generated.
+- Use `/reset-password` with the token and a new password.
+
+### Exercise 10 — Security Hardening
+Task:
+- Add `helmet`, `cors`, and cache-control headers for protected routes.
+- Reject wildcard origins and allow only a trusted frontend domain.
+- Add input sanitization to protect against injection attacks.
+
+Test:
+- Confirm `X-Powered-By` is removed and CORS policies are enforced.
+- Confirm protected responses include `Cache-Control: no-store`.
 
 ---
 
