@@ -1,9 +1,16 @@
-# 🌐 Complete REST API Course for Beginners
-## Module 1: Understanding REST Fundamentals
+# 🌐 **Complete REST API Course for Beginners**
+### **Module 1: Understanding REST Fundamentals**
+
+> **Build modern APIs with clean design, HTTP best practices, and real-world REST patterns.**
+>
+> - ✅ Learn REST fundamentals from first principles
+> - ✅ Design resource-based APIs with HTTP semantics
+> - ✅ Understand status codes, caching, and security
+> - ✅ Connect theory to real API examples
 
 ---
 
-## Table of Contents
+## 📚 Table of Contents
 1. [What is an API?](#what-is-an-api)
 2. [Understanding REST](#understanding-rest)
 3. [Key Principles of REST](#key-principles-of-rest)
