@@ -1,5 +1,4 @@
-
-Here is the full GitHub README for your **Database Integration** course material:
+Here is the complete, merged, and fully expanded **Database Integration** README — nothing removed, all gaps filled:
 
 ---
 
@@ -20,7 +19,9 @@ Here is the full GitHub README for your **Database Integration** course material
 7. [Querying Data](#7-querying-data)
 8. [Relationships](#8-relationships)
 9. [Database Design Basics](#9-database-design-basics)
-10. [Practice Projects](#10-practice-projects)
+10. [Migrations & Seeding](#10-migrations--seeding)
+11. [Transactions](#11-transactions)
+12. [Practice Projects](#12-practice-projects)
 
 ---
 
@@ -29,23 +30,42 @@ Here is the full GitHub README for your **Database Integration** course material
 A **database** is an organized place where your application stores and retrieves data — think of it like a super-powered Excel spreadsheet that your code can talk to.
 
 ### Why do we need one?
+
 Without a database, data disappears when your app restarts. Databases make data **persistent** (it stays there forever until you delete it).
 
-### Two main types:
+### Two main types
 
 | Type | Description | Examples |
 |------|-------------|---------|
 | **Relational (SQL)** | Data stored in tables with rows and columns, like a spreadsheet | PostgreSQL, MySQL, SQLite |
 | **NoSQL** | Data stored in flexible formats like JSON documents | MongoDB, Redis, Firebase |
 
+### How an app talks to a database
+
+```
+User's Browser
+      ↓
+  Your App (Node.js / Express)
+      ↓
+  Database Driver / ORM
+      ↓
+  Database (PostgreSQL or MongoDB)
+```
+
+Every time a user signs up, makes a purchase, or sends a message — your app writes to the database. Every time they load a page — your app reads from it.
+
 ---
 
 ## 2. PostgreSQL — Relational Database
 
 ### What is PostgreSQL?
+
 PostgreSQL (often called **Postgres**) is a powerful, open-source relational database. Data lives in **tables**, and tables relate to each other.
 
+> Founded in 1986, PostgreSQL is renowned for its robustness, ACID compliance, and support for complex queries. It excels in scenarios where data integrity and structured relationships are key — making it ideal for finance, enterprise content management, and any environment that demands rigorous transactional support.
+
 Think of it like this:
+
 ```
 users table          orders table
 -----------          ------------
@@ -83,6 +103,9 @@ CREATE DATABASE myapp;
 # See all tables
 \dt
 
+# See the structure of a specific table
+\d users
+
 # Exit
 \q
 ```
@@ -116,12 +139,29 @@ DELETE FROM users WHERE name = 'Alice';
 
 > 💡 **SERIAL PRIMARY KEY** means the `id` column auto-increments — PostgreSQL assigns 1, 2, 3... automatically.
 
+### PostgreSQL Data Types Reference
+
+| Type | Use for | Example |
+|------|---------|---------|
+| `SERIAL` | Auto-incrementing integer IDs | `id SERIAL PRIMARY KEY` |
+| `VARCHAR(n)` | Short text with max length | `name VARCHAR(100)` |
+| `TEXT` | Long text, no length limit | `bio TEXT` |
+| `INT` / `BIGINT` | Whole numbers | `age INT` |
+| `DECIMAL(p,s)` | Precise decimals (money) | `price DECIMAL(10,2)` |
+| `BOOLEAN` | True/false | `is_active BOOLEAN` |
+| `TIMESTAMP` | Date and time | `created_at TIMESTAMP` |
+| `DATE` | Date only | `birth_date DATE` |
+| `JSONB` | JSON data (searchable) | `metadata JSONB` |
+
 ---
 
 ## 3. MongoDB — NoSQL Database
 
 ### What is MongoDB?
+
 MongoDB stores data as **documents** (basically JSON objects) inside **collections** (like folders). There are no fixed columns — each document can have different fields.
+
+> Developed in 2009, MongoDB is a NoSQL document-oriented database designed to accommodate large volumes of unstructured data. Its primary use cases include applications that require high scalability and flexibility — such as content management systems, mobile applications, and real-time analytics where data structures might change frequently.
 
 ```json
 // A MongoDB "document" (like a row in SQL)
@@ -138,6 +178,17 @@ MongoDB stores data as **documents** (basically JSON objects) inside **collectio
 ```
 
 Notice you can store **arrays** and **nested objects** directly — this is very different from SQL.
+
+### SQL Terminology vs MongoDB Terminology
+
+| SQL | MongoDB | Description |
+|-----|---------|-------------|
+| Database | Database | The top-level container |
+| Table | Collection | Group of related records |
+| Row | Document | A single record |
+| Column | Field | A single piece of data |
+| Primary Key | `_id` | Unique identifier |
+| JOIN | `$lookup` / populate | Combining related data |
 
 ### Installing MongoDB
 
@@ -169,7 +220,7 @@ db.users.insertOne({
   age: 25
 })
 
-// Insert many
+// Insert many at once
 db.users.insertMany([
   { name: "Bob", age: 30 },
   { name: "Carol", age: 22 }
@@ -189,28 +240,74 @@ db.users.updateOne(
 
 // Delete
 db.users.deleteOne({ name: "Alice" })
+
+// Count documents
+db.users.countDocuments()
+
+// Drop (delete) an entire collection
+db.users.drop()
 ```
 
 ---
 
 ## 4. PostgreSQL vs MongoDB — Which One?
 
+### Feature Comparison
+
 | Feature | PostgreSQL | MongoDB |
 |--------|-----------|---------|
-| Data format | Tables & rows | JSON-like documents |
-| Schema | Fixed (you define columns upfront) | Flexible (fields can vary per document) |
-| Relationships | Very strong (JOIN support) | Possible but less natural |
-| Best for | Financial apps, structured data | Real-time apps, flexible/varied data |
-| Query language | SQL | MongoDB Query Language (MQL) |
-| Scaling | Vertical (bigger server) | Horizontal (more servers) |
+| **Founded** | 1986 | 2009 |
+| **Type** | Relational (SQL) | NoSQL (Document-based) |
+| **Data format** | Tables & rows | JSON-like documents |
+| **Schema** | Fixed (defined upfront) | Flexible (varies per document) |
+| **Relationships** | Very strong (JOIN support) | Possible but less natural |
+| **ACID compliance** | ✅ Full | ✅ Since v4.0 (multi-doc) |
+| **Horizontal scaling** | Replication | Sharding (built-in) |
+| **Query language** | SQL | MongoDB Query Language (MQL) |
+| **Best for** | Finance, enterprise, transactional | Real-time apps, big data, IoT |
+| **Open source** | ✅ Fully | Partially (Server Side Public License) |
+| **Notable users** | Apple, Skype, Instagram | eBay, Uber, Lyft |
 
-> 🧠 **Rule of thumb:** If your data is structured and highly relational → **PostgreSQL**. If your data is flexible or document-like → **MongoDB**.
+### Data Model Difference — Visual
+
+**PostgreSQL (relational):**
+```
+users table                posts table
+┌────┬───────┬──────────┐  ┌────┬─────────┬────────────┐
+│ id │ name  │ email    │  │ id │ user_id │ title      │
+├────┼───────┼──────────┤  ├────┼─────────┼────────────┤
+│ 1  │ Alice │ a@x.com  │  │ 1  │ 1       │ Hello      │
+│ 2  │ Bob   │ b@x.com  │  │ 2  │ 1       │ World      │
+└────┴───────┴──────────┘  └────┴─────────┴────────────┘
+        linked via user_id ──────────────┘
+```
+
+**MongoDB (document-based):**
+```json
+{
+  "_id": "abc123",
+  "name": "Alice",
+  "email": "a@x.com",
+  "posts": [
+    { "title": "Hello", "body": "..." },
+    { "title": "World", "body": "..." }
+  ]
+}
+```
+
+### When to choose which
+
+> 🧠 **Rule of thumb:**
+> - Data is **structured and highly relational** (users, orders, invoices) → **PostgreSQL**
+> - Data is **flexible or document-like** (user profiles, product catalogs, logs) → **MongoDB**
+> - You need **strict data integrity and transactions** → **PostgreSQL**
+> - You need **fast prototyping and flexible schema** → **MongoDB**
 
 ---
 
 ## 5. Database Connections
 
-Your Node.js app needs to **connect** to the database before it can read/write data.
+Your Node.js app needs to **connect** to the database before it can read or write data.
 
 ### Connecting to PostgreSQL with `pg`
 
@@ -223,11 +320,14 @@ npm install pg
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  host: 'localhost',
-  port: 5432,
-  database: 'myapp',
-  user: 'postgres',
-  password: 'yourpassword',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  max: 10,                // max number of connections in the pool
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 // Test the connection
@@ -251,7 +351,25 @@ async function getUsers() {
   const result = await pool.query('SELECT * FROM users');
   return result.rows; // array of user objects
 }
+
+// Parameterized queries — ALWAYS use these to prevent SQL injection
+async function getUserByEmail(email) {
+  const result = await pool.query(
+    'SELECT * FROM users WHERE email = $1',  // $1 is a placeholder
+    [email]                                  // value is passed separately
+  );
+  return result.rows[0];
+}
 ```
+
+> ⚠️ **Never do this** — it opens you to SQL Injection attacks:
+> ```javascript
+> // ❌ DANGEROUS
+> pool.query(`SELECT * FROM users WHERE email = '${email}'`);
+>
+> // ✅ SAFE — use parameterized queries
+> pool.query('SELECT * FROM users WHERE email = $1', [email]);
+> ```
 
 ### Connecting to MongoDB with `mongoose`
 
@@ -263,25 +381,48 @@ npm install mongoose
 // db.js
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/myapp')
-  .then(() => console.log('✅ Connected to MongoDB!'))
-  .catch(err => console.error('Connection error:', err));
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ Connected to MongoDB!');
+  } catch (err) {
+    console.error('❌ Connection error:', err.message);
+    process.exit(1); // stop the app if DB fails
+  }
+}
 
-module.exports = mongoose;
+// Listen for connection events
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️ MongoDB disconnected');
+});
+
+module.exports = connectDB;
 ```
 
-> 💡 **Connection Pools:** The `Pool` in `pg` means it keeps several connections open and reuses them — much faster than opening a new connection for every query.
+```javascript
+// server.js — connect before starting the server
+const connectDB = require('./db');
+
+async function start() {
+  await connectDB();            // connect to DB first
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
+  });
+}
+
+start();
+```
 
 ### Using Environment Variables (Best Practice)
 
-Never hardcode your database password in code. Use a `.env` file:
+Never hardcode your database credentials in code. Use a `.env` file:
 
 ```bash
 npm install dotenv
 ```
 
 ```env
-# .env
+# .env  — NEVER commit this file to GitHub
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=myapp
@@ -291,6 +432,7 @@ MONGO_URI=mongodb://localhost:27017/myapp
 ```
 
 ```javascript
+// server.js — load env vars first
 require('dotenv').config();
 
 const pool = new Pool({
@@ -302,8 +444,13 @@ const pool = new Pool({
 });
 ```
 
----
-Here is the fully expanded section for **ORM & ODM Concepts** — ready to copy into your README:
+```bash
+# .gitignore — add this so .env never gets pushed
+.env
+node_modules/
+```
+
+> 💡 **Connection Pools:** The `Pool` in `pg` keeps several connections open and reuses them — much faster than opening a new connection for every query. Think of it like having 10 phone lines open instead of dialling a new number every time.
 
 ---
 
@@ -311,13 +458,12 @@ Here is the fully expanded section for **ORM & ODM Concepts** — ready to copy 
 
 ### The Problem ORM/ODM Solves
 
-Imagine you are building a Node.js app. Without ORM/ODM, every time you want to talk to your database you have to:
+Without ORM/ODM, every time you want to talk to your database you have to:
 
 1. Write raw SQL or MongoDB query strings manually
 2. Get back plain data and manually convert it to JavaScript objects
-3. Repeat this for every single operation in your app
-
-This gets messy very fast. Here is what that pain looks like:
+3. Manually validate every field before saving
+4. Repeat this for every single operation in your app
 
 ```javascript
 // Without ORM — raw SQL, manual everything
@@ -325,29 +471,25 @@ const result = await pool.query(
   'SELECT id, name, email FROM users WHERE age > $1 AND active = $2',
   [18, true]
 );
-
-// result.rows is just a plain array of objects — no methods, no validation
+// result.rows is just a plain array — no methods, no validation
 const users = result.rows;
 ```
 
-**ORM/ODM fixes this** by letting you work with database records as proper JavaScript objects with built-in methods, validation, and relationships.
+**ORM/ODM fixes this** by letting you work with database records as proper JavaScript objects with built-in methods, validation, and relationships:
 
 ```javascript
 // With ORM — clean, readable, safe
 const users = await User.findAll({
   where: { age: { [Op.gt]: 18 }, active: true }
 });
-
 // users is an array of User instances with methods like user.save(), user.destroy()
 ```
-
----
 
 ### What Exactly is an ORM?
 
 **ORM = Object-Relational Mapper**
 
-It is a layer that sits between your JavaScript code and your SQL database. It **maps** database tables to JavaScript classes, and rows to JavaScript objects.
+A layer that sits between your JavaScript code and your SQL database. It **maps** database tables to JavaScript classes, and rows to JavaScript objects.
 
 ```
 Your JavaScript Code
@@ -359,13 +501,9 @@ Your JavaScript Code
 
 Think of ORM like a **translator**. You speak JavaScript, the database speaks SQL. The ORM translates between the two so you never have to write SQL yourself (unless you want to).
 
----
-
 ### What Exactly is an ODM?
 
-**ODM = Object-Document Mapper**
-
-Same concept as ORM, but for **document databases** like MongoDB instead of relational ones. It maps MongoDB collections to JavaScript classes, and documents to JavaScript objects.
+**ODM = Object-Document Mapper** — same concept as ORM but for document databases like MongoDB.
 
 ```
 Your JavaScript Code
@@ -375,14 +513,12 @@ Your JavaScript Code
     MongoDB Database
 ```
 
----
-
-### ORM vs ODM — Summary
+### ORM vs ODM Summary
 
 | | ORM | ODM |
 |--|-----|-----|
 | Full name | Object-Relational Mapper | Object-Document Mapper |
-| Used with | SQL databases (PostgreSQL, MySQL) | NoSQL document databases (MongoDB) |
+| Used with | SQL databases (PostgreSQL, MySQL) | NoSQL databases (MongoDB) |
 | Popular library | Sequelize, Prisma, TypeORM | Mongoose |
 | Maps | Tables → Classes, Rows → Objects | Collections → Models, Documents → Objects |
 
@@ -397,7 +533,7 @@ npm install sequelize pg pg-hstore
 ```
 
 - `sequelize` — the ORM library itself
-- `pg` — the PostgreSQL driver (Sequelize uses this under the hood)
+- `pg` — the PostgreSQL driver Sequelize uses under the hood
 - `pg-hstore` — handles a special PostgreSQL data type
 
 #### Step 2 — Set up the connection
@@ -407,17 +543,16 @@ npm install sequelize pg pg-hstore
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
-  'myapp',       // database name
-  'postgres',    // username
-  'password',    // password
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASS,
   {
-    host: 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     dialect: 'postgres',   // tells Sequelize we are using PostgreSQL
-    logging: false,        // set to console.log to see SQL queries in terminal
+    logging: false,        // set to console.log to see raw SQL in terminal
   }
 );
 
-// Test the connection
 async function testConnection() {
   try {
     await sequelize.authenticate();
@@ -428,13 +563,12 @@ async function testConnection() {
 }
 
 testConnection();
-
 module.exports = sequelize;
 ```
 
 #### Step 3 — Define a Model
 
-A **Model** is a JavaScript class that represents a table. You define it once and Sequelize handles creating/managing the table.
+A **Model** is a JavaScript class that represents a table. You define it once and Sequelize handles creating and managing the table.
 
 ```javascript
 // models/User.js
@@ -442,41 +576,37 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
 const User = sequelize.define(
-  'User',           // model name — Sequelize will look for a "users" table
+  'User',
   {
-    // Column definitions
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     name: {
-      type: DataTypes.STRING(100),  // VARCHAR(100)
-      allowNull: false,             // NOT NULL
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,                 // UNIQUE constraint
+      unique: true,
       validate: {
-        isEmail: true,              // Sequelize validates format before saving
+        isEmail: true,      // Sequelize validates format before saving
       },
     },
     age: {
       type: DataTypes.INTEGER,
-      validate: {
-        min: 0,
-        max: 120,
-      },
+      validate: { min: 0, max: 120 },
     },
     isActive: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,           // default value if not provided
+      defaultValue: true,
     },
   },
   {
-    tableName: 'users',   // explicit table name (optional)
-    timestamps: true,     // auto-adds createdAt and updatedAt columns
+    tableName: 'users',
+    timestamps: true,       // auto-adds createdAt and updatedAt columns
   }
 );
 
@@ -492,8 +622,8 @@ const User = require('./models/User');
 
 async function main() {
   // sync({ force: false }) — creates table only if it doesn't exist
-  // sync({ force: true })  — drops and recreates the table every time (⚠️ deletes all data)
-  // sync({ alter: true })  — updates the table to match your model (safer for development)
+  // sync({ force: true })  — drops and recreates every time ⚠️ (deletes all data)
+  // sync({ alter: true })  — updates the table to match your model (safe for dev)
   await sequelize.sync({ alter: true });
   console.log('✅ Tables synced!');
 }
@@ -504,6 +634,7 @@ main();
 #### Step 5 — CRUD Operations with Sequelize
 
 ```javascript
+const { Op } = require('sequelize');
 const User = require('./models/User');
 
 // ── CREATE ──────────────────────────────────────────
@@ -514,34 +645,29 @@ const alice = await User.create({
   email: 'alice@email.com',
   age: 25,
 });
-console.log(alice.id);    // 1  (auto-assigned by DB)
+console.log(alice.id);    // 1 (auto-assigned)
 console.log(alice.name);  // 'Alice'
 
-// build() + save() — two steps, useful if you need to modify before saving
+// build() + save() — two steps, modify before saving
 const bob = User.build({ name: 'Bob', email: 'bob@email.com', age: 30 });
-bob.age = 31;             // modify before saving
+bob.age = 31;
 await bob.save();
 
 // ── READ ────────────────────────────────────────────
 
-// Get all users
 const allUsers = await User.findAll();
 
-// Get with filter
 const adults = await User.findAll({
   where: { age: { [Op.gte]: 18 } },
   order: [['name', 'ASC']],
   limit: 10,
-  offset: 0,            // for pagination: offset = (page - 1) * limit
+  offset: 0,     // pagination: offset = (page - 1) * limit
 });
 
-// Get one user
 const user = await User.findOne({ where: { email: 'alice@email.com' } });
-
-// Get by primary key (id)
 const userById = await User.findByPk(1);
 
-// findOrCreate — finds the user, or creates them if they don't exist
+// findOrCreate — gets or creates if not found
 const [user, wasCreated] = await User.findOrCreate({
   where: { email: 'carol@email.com' },
   defaults: { name: 'Carol', age: 28 },
@@ -553,21 +679,20 @@ console.log(wasCreated); // true if a new record was created
 // Option 1: update an instance
 const alice = await User.findByPk(1);
 alice.age = 26;
-await alice.save();      // only saves changed fields
+await alice.save();   // only saves changed fields
 
-// Option 2: bulk update (update multiple rows at once)
+// Option 2: bulk update
 await User.update(
-  { isActive: false },          // what to change
-  { where: { age: { [Op.lt]: 18 } } }  // which rows
+  { isActive: false },
+  { where: { age: { [Op.lt]: 18 } } }
 );
 
 // ── DELETE ──────────────────────────────────────────
 
-// Option 1: destroy an instance
 const alice = await User.findByPk(1);
 await alice.destroy();
 
-// Option 2: bulk delete
+// Bulk delete
 await User.destroy({ where: { isActive: false } });
 ```
 
@@ -577,19 +702,19 @@ await User.destroy({ where: { isActive: false } });
 const { Op } = require('sequelize');
 
 // Comparison
-{ age: { [Op.gt]: 18 } }       // age > 18
-{ age: { [Op.gte]: 18 } }      // age >= 18
-{ age: { [Op.lt]: 65 } }       // age < 65
-{ age: { [Op.lte]: 65 } }      // age <= 65
-{ age: { [Op.ne]: 25 } }       // age != 25
-{ age: { [Op.between]: [18, 65] } }  // age BETWEEN 18 AND 65
+{ age: { [Op.gt]: 18 } }              // age > 18
+{ age: { [Op.gte]: 18 } }             // age >= 18
+{ age: { [Op.lt]: 65 } }              // age < 65
+{ age: { [Op.lte]: 65 } }             // age <= 65
+{ age: { [Op.ne]: 25 } }              // age != 25
+{ age: { [Op.between]: [18, 65] } }   // BETWEEN 18 AND 65
 
 // String matching
-{ name: { [Op.like]: 'A%' } }    // name LIKE 'A%' (starts with A)
-{ name: { [Op.iLike]: 'a%' } }   // case-insensitive LIKE
+{ name: { [Op.like]: 'A%' } }         // LIKE 'A%' (starts with A)
+{ name: { [Op.iLike]: 'a%' } }        // case-insensitive LIKE
 
-// Array
-{ name: { [Op.in]: ['Alice', 'Bob'] } }   // name IN ('Alice', 'Bob')
+// Array membership
+{ name: { [Op.in]: ['Alice', 'Bob'] } }
 { name: { [Op.notIn]: ['Charlie'] } }
 
 // Logical
@@ -615,14 +740,11 @@ const mongoose = require('mongoose');
 
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ MongoDB connected!');
   } catch (error) {
     console.error('❌ Connection failed:', error.message);
-    process.exit(1);   // exit the app if DB fails to connect
+    process.exit(1);
   }
 }
 
@@ -631,7 +753,7 @@ module.exports = connectDB;
 
 #### Step 3 — Define a Schema
 
-In MongoDB, documents in a collection can technically have any shape. A **Schema** enforces a consistent structure at the application level — Mongoose checks it before saving.
+A **Schema** enforces a consistent structure at the application level — Mongoose checks it before saving anything to MongoDB.
 
 ```javascript
 // models/User.js
@@ -641,8 +763,8 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Name is required'],    // required with custom error message
-      trim: true,                               // removes whitespace automatically
+      required: [true, 'Name is required'],
+      trim: true,
       minlength: 2,
       maxlength: 100,
     },
@@ -650,8 +772,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Email is required'],
       unique: true,
-      lowercase: true,                          // auto-converts to lowercase before saving
-      match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],  // regex validation
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],
     },
     age: {
       type: Number,
@@ -660,34 +782,32 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin', 'moderator'],    // only these values allowed
+      enum: ['user', 'admin', 'moderator'],
       default: 'user',
     },
     isActive: {
       type: Boolean,
       default: true,
     },
-    tags: [String],                             // array of strings
-    address: {                                  // nested object (sub-document)
+    tags: [String],           // array of strings
+    address: {                // nested sub-document
       street: String,
       city: String,
       country: String,
     },
   },
   {
-    timestamps: true,   // auto-adds createdAt and updatedAt fields
+    timestamps: true,         // auto-adds createdAt and updatedAt
   }
 );
 
 const User = mongoose.model('User', userSchema);
-// Mongoose will use the collection named 'users' (auto-pluralized and lowercased)
+// Mongoose creates a collection called 'users' (auto-pluralized, lowercased)
 
 module.exports = User;
 ```
 
 #### Step 4 — Schema Methods & Virtuals
-
-Mongoose lets you add custom methods directly onto your model — something raw MongoDB queries can never do.
 
 ```javascript
 // Instance method — available on a single document
@@ -700,12 +820,12 @@ userSchema.statics.findActiveUsers = function () {
   return this.find({ isActive: true });
 };
 
-// Virtual — a computed field that is NOT stored in the DB
+// Virtual — computed field NOT stored in the DB
 userSchema.virtual('isAdult').get(function () {
   return this.age >= 18;
 });
 
-// Usage:
+// Usage
 const user = await User.findOne({ name: 'Alice' });
 console.log(user.getDisplayName());  // 'Alice (alice@email.com)'
 console.log(user.isAdult);           // true
@@ -720,14 +840,12 @@ const User = require('./models/User');
 
 // ── CREATE ──────────────────────────────────────────
 
-// Method 1: Model.create()
 const alice = await User.create({
   name: 'Alice',
   email: 'alice@email.com',
   age: 25,
 });
 
-// Method 2: new Model() + save()
 const bob = new User({ name: 'Bob', email: 'bob@email.com', age: 30 });
 await bob.save();
 
@@ -741,32 +859,28 @@ const userById = await User.findById('64abc123def456');
 // Chaining
 const users = await User
   .find({ isActive: true })
-  .sort({ name: 1 })            // 1 = ascending, -1 = descending
+  .sort({ name: 1 })         // 1 = ascending, -1 = descending
   .limit(10)
   .skip(20)
-  .select('name email age');    // only return these fields
+  .select('name email age'); // only return these fields
 
 // ── UPDATE ──────────────────────────────────────────
 
-// Option 1: find, modify, save (triggers validators and middleware)
+// Option 1: find → modify → save (triggers validators + middleware)
 const alice = await User.findOne({ name: 'Alice' });
 alice.age = 26;
 await alice.save();
 
-// Option 2: findByIdAndUpdate — direct update, returns updated doc
+// Option 2: findByIdAndUpdate
 const updated = await User.findByIdAndUpdate(
   '64abc123',
   { $set: { age: 26 } },
   { new: true, runValidators: true }
-  // new: true        → return the updated document, not the old one
-  // runValidators    → run schema validation on the update
+  // new: true → return updated doc, not the old one
 );
 
 // Option 3: bulk update
-await User.updateMany(
-  { isActive: false },
-  { $set: { role: 'inactive' } }
-);
+await User.updateMany({ isActive: false }, { $set: { role: 'inactive' } });
 
 // ── DELETE ──────────────────────────────────────────
 
@@ -777,18 +891,14 @@ await User.deleteMany({ isActive: false });
 
 #### Mongoose Middleware (Hooks)
 
-Middleware lets you run code **automatically before or after** database operations — very powerful for things like hashing passwords.
-
 ```javascript
 const bcrypt = require('bcrypt');
 
 // pre('save') — runs BEFORE a document is saved
 userSchema.pre('save', async function (next) {
-  // 'this' refers to the document being saved
-  if (!this.isModified('password')) return next(); // only hash if password changed
-
+  if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
-  next(); // must call next() to continue
+  next();
 });
 
 // post('save') — runs AFTER a document is saved
@@ -796,10 +906,9 @@ userSchema.post('save', function (doc) {
   console.log(`New user saved: ${doc.email}`);
 });
 
-// pre('find') — runs before any find query
+// pre('find') — auto-filter inactive users on every query
 userSchema.pre(/^find/, function (next) {
-  // 'this' refers to the query
-  this.where({ isActive: true }); // automatically filter out inactive users
+  this.where({ isActive: true });
   next();
 });
 ```
@@ -808,7 +917,7 @@ userSchema.pre(/^find/, function (next) {
 
 ### Prisma — Modern ORM (Bonus)
 
-Prisma is a newer, increasingly popular ORM that works with PostgreSQL, MySQL, and MongoDB. It uses a **schema file** instead of defining models in JavaScript.
+Prisma is a newer, increasingly popular ORM for PostgreSQL, MySQL, and MongoDB. It uses a **schema file** instead of defining models in JavaScript.
 
 ```bash
 npm install prisma @prisma/client
@@ -838,30 +947,20 @@ model Post {
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Create
 const user = await prisma.user.create({
   data: { name: 'Alice', email: 'alice@email.com', age: 25 },
 });
 
-// Read
 const users = await prisma.user.findMany({
   where: { age: { gt: 18 } },
   orderBy: { name: 'asc' },
 });
 
-// Update
-await prisma.user.update({
-  where: { id: 1 },
-  data: { age: 26 },
-});
-
-// Delete
+await prisma.user.update({ where: { id: 1 }, data: { age: 26 } });
 await prisma.user.delete({ where: { id: 1 } });
 ```
 
-> 💡 Prisma gives you **full TypeScript autocomplete** for your queries — your editor knows the exact shape of every model.
-
----
+> 💡 Prisma gives you **full TypeScript autocomplete** — your editor knows the exact shape of every model.
 
 ### Which ORM/ODM Should You Use?
 
@@ -869,12 +968,195 @@ await prisma.user.delete({ where: { id: 1 } });
 |-----------|---------------|
 | Learning PostgreSQL with Node.js | **Sequelize** — widely taught, lots of resources |
 | Learning MongoDB with Node.js | **Mongoose** — the industry standard ODM |
-| Production PostgreSQL app (especially with TypeScript) | **Prisma** — best developer experience |
-| Need raw performance and control | Write raw SQL/queries directly |
+| Production PostgreSQL app (especially TypeScript) | **Prisma** — best developer experience |
+| Need raw performance and full control | Write raw SQL/queries directly |
 
 ---
 
-> ⬅️ [Back: Database Connections](#5-database-connections) &nbsp;&nbsp;&nbsp; [Next: Querying Data](#7-querying-data) ➡️
+## 7. Querying Data
+
+### SQL Queries (PostgreSQL)
+
+```sql
+-- Select specific columns
+SELECT name, email FROM users;
+
+-- Filter with WHERE
+SELECT * FROM users WHERE age > 18;
+SELECT * FROM users WHERE name = 'Alice' AND age < 30;
+SELECT * FROM users WHERE name = 'Alice' OR name = 'Bob';
+
+-- Sort results
+SELECT * FROM users ORDER BY age ASC;    -- ascending
+SELECT * FROM users ORDER BY age DESC;   -- descending
+
+-- Limit & Offset (pagination)
+SELECT * FROM users LIMIT 10 OFFSET 20; -- page 3 of 10 per page
+
+-- Count & Aggregate functions
+SELECT COUNT(*) FROM users;
+SELECT AVG(age) FROM users;
+SELECT MAX(age), MIN(age) FROM users;
+SELECT SUM(price) FROM orders;
+
+-- Pattern matching with LIKE
+SELECT * FROM users WHERE name LIKE 'A%';           -- starts with A
+SELECT * FROM users WHERE email LIKE '%@gmail.com'; -- gmail users
+SELECT * FROM users WHERE name LIKE '%ali%';        -- contains 'ali'
+
+-- NULL checks
+SELECT * FROM users WHERE age IS NULL;
+SELECT * FROM users WHERE age IS NOT NULL;
+
+-- GROUP BY — group rows and aggregate
+SELECT role, COUNT(*) as total
+FROM users
+GROUP BY role;
+-- Returns: admin→5, user→120, moderator→8
+
+-- HAVING — filter groups (like WHERE but for GROUP BY)
+SELECT role, COUNT(*) as total
+FROM users
+GROUP BY role
+HAVING COUNT(*) > 10;
+
+-- JOIN (covered in depth in Relationships section)
+SELECT users.name, orders.product
+FROM users
+JOIN orders ON users.id = orders.user_id;
+```
+
+### MongoDB Queries (MQL)
+
+```javascript
+// Basic find
+db.users.find({})                              // all documents
+db.users.find({ age: 25 })                     // exact match
+db.users.find({ age: { $gt: 18 } })            // greater than
+db.users.find({ age: { $gte: 18, $lte: 30 } }) // range
+
+// Comparison operators
+// $gt = greater than        $lt = less than
+// $gte = greater or equal   $lte = less or equal
+// $ne = not equal           $in = in array
+
+db.users.find({ name: { $in: ['Alice', 'Bob'] } })
+db.users.find({ name: { $nin: ['Charlie'] } })
+
+// Logical operators
+db.users.find({ $and: [{ age: { $gt: 18 } }, { name: 'Alice' }] })
+db.users.find({ $or: [{ name: 'Alice' }, { name: 'Bob' }] })
+db.users.find({ age: { $not: { $lt: 18 } } })
+
+// Sorting
+db.users.find().sort({ age: 1 })   // ascending
+db.users.find().sort({ age: -1 })  // descending
+
+// Limit & skip (pagination)
+db.users.find().limit(10).skip(20)
+
+// Count
+db.users.countDocuments({ age: { $gt: 18 } })
+
+// Projection — select specific fields
+db.users.find({}, { name: 1, email: 1, _id: 0 })
+// 1 = include, 0 = exclude
+
+// Regex search
+db.users.find({ name: { $regex: /^ali/i } })  // starts with 'ali' (case-insensitive)
+
+// Check if field exists
+db.users.find({ phone: { $exists: true } })
+```
+
+### Querying with Mongoose in Node.js
+
+```javascript
+// Find all
+const users = await User.find();
+
+// Find with filter
+const adults = await User.find({ age: { $gt: 18 } });
+
+// Find one by field
+const alice = await User.findOne({ name: 'Alice' });
+
+// Find by MongoDB ID
+const user = await User.findById('64abc123');
+
+// Chaining multiple options
+const users = await User
+  .find({ age: { $gt: 18 } })
+  .sort({ name: 1 })
+  .limit(10)
+  .skip(0)
+  .select('name email');
+
+// Count matching documents
+const count = await User.countDocuments({ isActive: true });
+
+// Check if any document matches
+const exists = await User.exists({ email: 'alice@email.com' });
+// returns the _id if found, null if not
+```
+
+### Querying with Sequelize in Node.js
+
+```javascript
+const { Op } = require('sequelize');
+
+// Find all with filters, sorting, pagination
+const users = await User.findAll({
+  where: { age: { [Op.gt]: 18 }, isActive: true },
+  order: [['name', 'ASC']],
+  limit: 10,
+  offset: 0,
+  attributes: ['id', 'name', 'email'],  // select specific columns
+});
+
+// Count
+const total = await User.count({ where: { isActive: true } });
+
+// Find and count together (useful for pagination)
+const { count, rows } = await User.findAndCountAll({
+  where: { isActive: true },
+  limit: 10,
+  offset: 0,
+});
+// count = total matching records, rows = current page records
+
+// Raw SQL query when you need full control
+const [results] = await sequelize.query(
+  'SELECT * FROM users WHERE age > :age',
+  { replacements: { age: 18 } }
+);
+```
+
+### Pagination Pattern (used in real apps)
+
+```javascript
+// GET /api/users?page=2&limit=10
+app.get('/api/users', async (req, res) => {
+  const page  = parseInt(req.query.page)  || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip  = (page - 1) * limit;
+
+  // MongoDB / Mongoose
+  const total = await User.countDocuments();
+  const users = await User.find().skip(skip).limit(limit);
+
+  res.json({
+    data: users,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  });
+});
+```
+
 ---
 
 ## 8. Relationships
@@ -883,11 +1165,11 @@ Relationships define how different pieces of data are connected to each other.
 
 ### Types of Relationships
 
-| Type | Example |
-|------|---------|
-| **One-to-One** | One user has one profile |
-| **One-to-Many** | One user has many posts |
-| **Many-to-Many** | Many students have many courses |
+| Type | Real-world example | Database example |
+|------|--------------------|-----------------|
+| **One-to-One** | One user has one passport | `users` → `profiles` |
+| **One-to-Many** | One user writes many posts | `users` → `posts` |
+| **Many-to-Many** | Many students take many courses | `students` ↔ `courses` via `enrollments` |
 
 ---
 
@@ -902,47 +1184,112 @@ CREATE TABLE users (
   name VARCHAR(100) NOT NULL
 );
 
--- Posts table — each post belongs to one user
+-- One-to-One: each user has one profile
+CREATE TABLE profiles (
+  id SERIAL PRIMARY KEY,
+  bio TEXT,
+  avatar_url VARCHAR(255),
+  user_id INT UNIQUE REFERENCES users(id) ON DELETE CASCADE
+  -- UNIQUE enforces one-to-one (no two profiles for same user)
+  -- ON DELETE CASCADE: if user is deleted, profile is deleted too
+);
+
+-- One-to-Many: each post belongs to one user
 CREATE TABLE posts (
   id SERIAL PRIMARY KEY,
   title VARCHAR(200) NOT NULL,
   body TEXT,
-  user_id INT REFERENCES users(id)  -- foreign key
+  user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 ```
 
-#### JOIN — combining tables in a query
+#### ON DELETE options
 
 ```sql
--- Get all posts with their author's name
+ON DELETE CASCADE     -- delete child records when parent is deleted
+ON DELETE SET NULL    -- set foreign key to NULL when parent is deleted
+ON DELETE RESTRICT    -- prevent deleting parent if children exist (default)
+```
+
+#### JOIN — combining tables in queries
+
+```sql
+-- INNER JOIN — only rows that match in BOTH tables
 SELECT posts.title, users.name AS author
 FROM posts
-JOIN users ON posts.user_id = users.id;
+INNER JOIN users ON posts.user_id = users.id;
 
--- LEFT JOIN — include posts even if user is missing
-SELECT posts.title, users.name
+-- LEFT JOIN — all posts, even if the user was deleted
+SELECT posts.title, users.name AS author
 FROM posts
 LEFT JOIN users ON posts.user_id = users.id;
+
+-- Multiple JOINs
+SELECT
+  posts.title,
+  users.name AS author,
+  COUNT(comments.id) AS comment_count
+FROM posts
+JOIN users ON posts.user_id = users.id
+LEFT JOIN comments ON comments.post_id = posts.id
+GROUP BY posts.id, users.name;
 ```
 
 #### Many-to-Many — requires a junction table
 
 ```sql
 CREATE TABLE students (id SERIAL PRIMARY KEY, name VARCHAR(100));
-CREATE TABLE courses (id SERIAL PRIMARY KEY, title VARCHAR(100));
+CREATE TABLE courses  (id SERIAL PRIMARY KEY, title VARCHAR(100));
 
--- Junction table
+-- Junction table: links students and courses
 CREATE TABLE enrollments (
-  student_id INT REFERENCES students(id),
-  course_id INT REFERENCES courses(id),
-  PRIMARY KEY (student_id, course_id)
+  student_id INT REFERENCES students(id) ON DELETE CASCADE,
+  course_id  INT REFERENCES courses(id)  ON DELETE CASCADE,
+  enrolled_at TIMESTAMP DEFAULT NOW(),
+  PRIMARY KEY (student_id, course_id)  -- composite PK prevents duplicates
 );
 
--- Find all courses for student with id = 1
-SELECT courses.title
+-- Find all courses for a specific student
+SELECT courses.title, enrollments.enrolled_at
 FROM enrollments
 JOIN courses ON enrollments.course_id = courses.id
 WHERE enrollments.student_id = 1;
+
+-- Find all students in a specific course
+SELECT students.name
+FROM enrollments
+JOIN students ON enrollments.student_id = students.id
+WHERE enrollments.course_id = 3;
+```
+
+#### Relationships with Sequelize
+
+```javascript
+const User = require('./models/User');
+const Post = require('./models/Post');
+
+// Define the association
+User.hasMany(Post, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Post.belongsTo(User, { foreignKey: 'user_id' });
+
+// Many-to-Many
+Student.belongsToMany(Course, { through: 'enrollments' });
+Course.belongsToMany(Student, { through: 'enrollments' });
+
+// Query with associated data (like JOIN)
+const users = await User.findAll({
+  include: [{ model: Post }],   // fetch users WITH their posts
+});
+
+// users[0].Posts is an array of that user's posts
+
+// Nested includes
+const users = await User.findAll({
+  include: [{
+    model: Post,
+    include: [{ model: Comment }]
+  }]
+});
 ```
 
 ---
@@ -954,18 +1301,20 @@ Two approaches: **Referencing** (like foreign keys) or **Embedding** (nesting do
 #### Referencing — like SQL foreign keys
 
 ```javascript
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-});
+const userSchema = new mongoose.Schema({ name: String, email: String });
 
 const postSchema = new mongoose.Schema({
   title: String,
   body: String,
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // references the User model
+    ref: 'User',   // tells Mongoose where to look when populating
+    required: true,
   },
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+  }],
 });
 
 const User = mongoose.model('User', userSchema);
@@ -973,29 +1322,53 @@ const Post = mongoose.model('Post', postSchema);
 
 // Create a post linked to a user
 const user = await User.findOne({ name: 'Alice' });
-await Post.create({ title: 'My First Post', body: '...', author: user._id });
+await Post.create({ title: 'My Post', body: '...', author: user._id });
 
-// Populate — replace the ID with the actual user object
+// Populate — replaces the ObjectId with the actual document
 const posts = await Post.find().populate('author', 'name email');
-// Now posts[0].author is { name: 'Alice', email: '...' } not just an ID
+// posts[0].author is now { name: 'Alice', email: '...' } — not just an ID
+
+// Nested populate
+const posts = await Post.find()
+  .populate('author', 'name')
+  .populate({ path: 'comments', populate: { path: 'author', select: 'name' } });
 ```
 
 #### Embedding — nest documents inside documents
 
 ```javascript
-// Good when child data is small and always loaded with the parent
+// Good when data is small and always loaded with the parent
 const userSchema = new mongoose.Schema({
   name: String,
-  address: {          // embedded sub-document
+  address: {              // embedded sub-document
     street: String,
     city: String,
     country: String,
   },
-  hobbies: [String],  // embedded array
+  socialLinks: {
+    twitter: String,
+    github: String,
+  },
+  hobbies: [String],      // array of strings
+  recentSearches: [{      // array of sub-documents
+    query: String,
+    searchedAt: { type: Date, default: Date.now },
+  }],
 });
 ```
 
-> 🧠 **Rule of thumb:** Embed when data is small and always needed together. Reference when data is large or needs to be queried independently.
+#### Embedding vs Referencing — Decision Guide
+
+| Situation | Use |
+|-----------|-----|
+| Data is small and always needed together | **Embed** |
+| Data changes independently | **Reference** |
+| Data is shared between multiple documents | **Reference** |
+| You rarely need the related data | **Reference** |
+| Data is large (could exceed 16MB doc limit) | **Reference** |
+| You need to query the nested data directly | **Reference** |
+
+> 🧠 **Rule of thumb:** A user's `address` → embed it. A user's `posts` (could be thousands) → reference them.
 
 ---
 
@@ -1003,9 +1376,10 @@ const userSchema = new mongoose.Schema({
 
 Good database design saves you from enormous headaches later. Here are the core principles.
 
-### Normalization — removing duplication
+### Normalization — Removing Duplication
 
 **Bad design (denormalized):**
+
 ```
 orders table
 | order_id | customer_name | customer_email | product |
@@ -1013,90 +1387,410 @@ orders table
 | 1        | Alice         | a@x.com        | Laptop  |
 | 2        | Alice         | a@x.com        | Mouse   |
 ```
-Alice's email is repeated. If she changes her email, you have to update every row.
+
+Alice's email is repeated. If she changes her email, you must update every row — miss one and your data is inconsistent.
 
 **Good design (normalized):**
+
 ```
 users                          orders
 id | name  | email             id | user_id | product
 1  | Alice | a@x.com           1  | 1       | Laptop
                                2  | 1       | Mouse
 ```
+
 Now Alice's email is stored once. Update it once, it's updated everywhere.
+
+### The Three Normal Forms (Simplified)
+
+| Form | Rule | What it prevents |
+|------|------|-----------------|
+| **1NF** | Each column has one value (no lists in a column) | `hobbies = "coding, reading"` |
+| **2NF** | Every non-key column depends on the full primary key | Partial dependencies |
+| **3NF** | No column depends on another non-key column | Transitive dependencies |
+
+> 💡 For most beginner projects, just aim for 1NF and 2NF. Full 3NF is a bonus.
 
 ### Primary Keys & Foreign Keys
 
-- **Primary Key** — a unique identifier for each row. Usually `id`. Never null, never duplicated.
-- **Foreign Key** — a column that points to a primary key in another table. Creates the relationship.
-
-### Indexes — making queries fast
-
-Without an index, a query scans every row in the table. With an index, it jumps straight to the result.
-
 ```sql
--- Without index: slow on large tables
-SELECT * FROM users WHERE email = 'alice@email.com';
+-- Primary Key: unique identifier for each row
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,   -- auto-assigned, unique, never null
+  email VARCHAR(150) UNIQUE NOT NULL
+);
 
--- Create an index on the email column
-CREATE INDEX idx_users_email ON users(email);
-
--- Now the query above is fast
+-- Foreign Key: points to another table's primary key
+CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id)   -- foreign key
+);
 ```
 
-> 💡 Always index columns you frequently search or filter by (`WHERE email = ...`, `WHERE user_id = ...`).
+- **Primary Key** — Never null, never duplicated. Every table should have one.
+- **Foreign Key** — Creates the relationship between tables. Can be null (optional relationship).
+
+### Indexes — Making Queries Fast
+
+Without an index, a query scans **every single row** (called a full table scan). On a table with 1 million users, that is slow.
+
+```sql
+-- Slow without index (scans all rows)
+SELECT * FROM users WHERE email = 'alice@email.com';
+
+-- Add an index on the email column
+CREATE INDEX idx_users_email ON users(email);
+
+-- Now the query jumps straight to Alice's row
+
+-- Index on foreign key (very important for JOIN performance)
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+
+-- Composite index (for queries that filter by two columns together)
+CREATE INDEX idx_orders_user_status ON orders(user_id, status);
+-- Fast for: WHERE user_id = 1 AND status = 'pending'
+```
+
+> 💡 **Always index:** foreign key columns, columns in WHERE clauses, columns in ORDER BY.
+> ⚠️ **Don't over-index:** every index slows down INSERT/UPDATE/DELETE slightly — the database must update the index too.
 
 ### Naming Conventions
 
 ```sql
 -- Tables: lowercase, plural, snake_case
-users, blog_posts, order_items
+users, blog_posts, order_items, password_reset_tokens
 
 -- Columns: lowercase, snake_case
-user_id, created_at, first_name
+user_id, created_at, first_name, is_active
 
--- Primary key: always named "id"
--- Foreign key: always named "<table>_id" e.g. user_id, product_id
+-- Primary key: always "id"
+-- Foreign key: always "<singular_table_name>_id"
+user_id, product_id, category_id
+
+-- Indexes: idx_<table>_<column>
+idx_users_email, idx_posts_user_id
 ```
 
-### Data Types — choosing the right type
+### Data Types — Choosing the Right Type
 
-| Data | PostgreSQL Type | MongoDB Type |
-|------|----------------|-------------|
+| Data | PostgreSQL | MongoDB (Mongoose) |
+|------|------------|--------------------|
 | Short text | `VARCHAR(255)` | `String` |
 | Long text | `TEXT` | `String` |
 | Whole number | `INT` or `BIGINT` | `Number` |
-| Decimal | `DECIMAL` or `FLOAT` | `Number` |
+| Precise decimal (money) | `DECIMAL(10,2)` | `Number` |
 | True/False | `BOOLEAN` | `Boolean` |
 | Date & time | `TIMESTAMP` | `Date` |
-| Unique ID | `SERIAL` (auto) | `ObjectId` (auto) |
+| Date only | `DATE` | `Date` |
+| Auto-increment ID | `SERIAL` | `ObjectId` (auto) |
+| JSON data | `JSONB` | Native (any shape) |
+| Array | `INT[]` or junction table | `[String]` or `[{ ... }]` |
 
 ### Entity Relationship Diagram (ERD)
 
-Before writing code, sketch your tables/collections and their relationships:
+Before writing code, sketch your tables and their relationships. This is called an **ERD**.
 
 ```
-[users]          [posts]           [comments]
-id ──────────── user_id (FK)       id
-name             id ─────────────── post_id (FK)
-email            title              body
-                 body               user_id (FK)
+[users]                [posts]                [comments]
+┌──────────────┐      ┌──────────────┐       ┌──────────────┐
+│ id (PK)      │──┐   │ id (PK)      │──┐    │ id (PK)      │
+│ name         │  └──▶│ user_id (FK) │  └───▶│ post_id (FK) │
+│ email        │      │ title        │        │ body         │
+│ created_at   │      │ body         │        │ user_id (FK) │──▶[users]
+└──────────────┘      └──────────────┘        └──────────────┘
+```
+
+```
+[students]           [enrollments]          [courses]
+┌──────────┐        ┌──────────────┐       ┌──────────┐
+│ id (PK)  │──────▶ │ student_id   │       │ id (PK)  │
+│ name     │        │ course_id    │◀───── │ title    │
+└──────────┘        │ enrolled_at  │       └──────────┘
+                    └──────────────┘
+```
+
+### Database Design Process
+
+```
+1. Identify your entities
+   (What "things" does your app have? Users, Products, Orders...)
+
+2. List the attributes of each entity
+   (What data does each thing have? User: name, email, age...)
+
+3. Identify relationships
+   (How do they connect? User has many Orders...)
+
+4. Choose primary and foreign keys
+5. Draw the ERD
+6. Normalize — remove duplication
+7. THEN write your code
 ```
 
 ---
 
-## 10. Practice Projects
+## 10. Migrations & Seeding
+
+### What is a Migration?
+
+A migration is a versioned file that describes a change to your database schema. Instead of manually running SQL commands on each server, you write migration files that can be run (and undone) automatically.
+
+```
+Without migrations:                  With migrations:
+"Did you add the new               migrations/
+  phone column to staging?"           001_create_users.js
+"I forgot..."                         002_add_phone_to_users.js
+"It's broken in production!"          003_create_posts.js
+                                    → everyone runs: npm run migrate
+```
+
+### Migrations with Sequelize
+
+```bash
+# Install the CLI
+npm install --save-dev sequelize-cli
+
+# Initialize (creates folders)
+npx sequelize-cli init
+```
+
+```javascript
+// migrations/20240101_create_users.js
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    // 'up' = apply the migration
+    await queryInterface.createTable('users', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name:  { type: Sequelize.STRING,  allowNull: false },
+      email: { type: Sequelize.STRING,  allowNull: false, unique: true },
+      created_at: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+    });
+  },
+
+  down: async (queryInterface) => {
+    // 'down' = undo the migration
+    await queryInterface.dropTable('users');
+  },
+};
+```
+
+```bash
+# Run all pending migrations
+npx sequelize-cli db:migrate
+
+# Undo the last migration
+npx sequelize-cli db:migrate:undo
+
+# Undo all migrations
+npx sequelize-cli db:migrate:undo:all
+```
+
+### Seeding — Filling the Database with Test Data
+
+```javascript
+// seeders/20240101_seed_users.js
+module.exports = {
+  up: async (queryInterface) => {
+    await queryInterface.bulkInsert('users', [
+      { name: 'Alice', email: 'alice@email.com', created_at: new Date() },
+      { name: 'Bob',   email: 'bob@email.com',   created_at: new Date() },
+    ]);
+  },
+
+  down: async (queryInterface) => {
+    await queryInterface.bulkDelete('users', null, {});
+  },
+};
+```
+
+```bash
+# Run all seeders
+npx sequelize-cli db:seed:all
+
+# Undo all seeders
+npx sequelize-cli db:seed:undo:all
+```
+
+### Seeding with Mongoose
+
+```javascript
+// seeds/users.js
+const mongoose = require('mongoose');
+const User = require('../models/User');
+require('dotenv').config();
+
+const seedUsers = [
+  { name: 'Alice', email: 'alice@email.com', age: 25 },
+  { name: 'Bob',   email: 'bob@email.com',   age: 30 },
+];
+
+async function seed() {
+  await mongoose.connect(process.env.MONGO_URI);
+  await User.deleteMany({});          // clear existing data
+  await User.insertMany(seedUsers);   // insert seed data
+  console.log('✅ Database seeded!');
+  await mongoose.disconnect();
+}
+
+seed();
+```
+
+```bash
+node seeds/users.js
+```
+
+---
+
+## 11. Transactions
+
+### What is a Transaction?
+
+A transaction is a group of database operations that must **all succeed or all fail together**. If one step fails, everything is rolled back as if nothing happened.
+
+The classic example — transferring money:
+
+```
+Transfer $100 from Alice to Bob:
+  Step 1: Deduct $100 from Alice
+  Step 2: Add $100 to Bob
+
+What if the server crashes after Step 1 but before Step 2?
+→ Alice lost $100, Bob got nothing ❌
+
+With a transaction:
+→ Both steps succeed ✅ OR both are undone ✅ — never a partial result
+```
+
+### Transactions in PostgreSQL
+
+```javascript
+const pool = require('./db');
+
+async function transferMoney(fromUserId, toUserId, amount) {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');   // start the transaction
+
+    await client.query(
+      'UPDATE accounts SET balance = balance - $1 WHERE user_id = $2',
+      [amount, fromUserId]
+    );
+
+    await client.query(
+      'UPDATE accounts SET balance = balance + $1 WHERE user_id = $2',
+      [amount, toUserId]
+    );
+
+    await client.query('COMMIT');  // save all changes
+    console.log('✅ Transfer complete');
+
+  } catch (error) {
+    await client.query('ROLLBACK'); // undo all changes
+    console.error('❌ Transfer failed, rolled back:', error.message);
+    throw error;
+
+  } finally {
+    client.release(); // always return the client to the pool
+  }
+}
+```
+
+### Transactions with Sequelize
+
+```javascript
+const sequelize = require('./database');
+
+async function createOrderWithItems(userId, items) {
+  const t = await sequelize.transaction();
+
+  try {
+    const order = await Order.create({ userId, status: 'pending' }, { transaction: t });
+
+    for (const item of items) {
+      await OrderItem.create({
+        orderId: order.id,
+        productId: item.productId,
+        quantity: item.quantity,
+      }, { transaction: t });
+
+      // Deduct stock
+      await Product.decrement('stock', {
+        by: item.quantity,
+        where: { id: item.productId },
+        transaction: t,
+      });
+    }
+
+    await t.commit();
+    return order;
+
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+```
+
+### Transactions with Mongoose
+
+```javascript
+const mongoose = require('mongoose');
+
+async function transferPoints(fromUserId, toUserId, points) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    await User.updateOne(
+      { _id: fromUserId },
+      { $inc: { points: -points } },
+      { session }
+    );
+
+    await User.updateOne(
+      { _id: toUserId },
+      { $inc: { points: +points } },
+      { session }
+    );
+
+    await session.commitTransaction();
+    console.log('✅ Points transferred');
+
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+
+  } finally {
+    session.endSession();
+  }
+}
+```
+
+> ⚠️ MongoDB transactions require a **Replica Set** or Atlas cluster. They don't work on a standalone local MongoDB.
+
+---
+
+## 12. Practice Projects
 
 ### 🟢 Beginner
-- **User Directory** — CRUD app with a `users` table/collection (Create, Read, Update, Delete)
+- **User Directory** — CRUD app with a `users` table/collection
 - **Todo List API** — Express.js + MongoDB with Mongoose; todos belong to users
+- **Notes App** — PostgreSQL + Sequelize; users create and manage notes
 
 ### 🟡 Intermediate
-- **Blog API** — PostgreSQL + Sequelize; users, posts, and comments with relationships
+- **Blog API** — PostgreSQL + Sequelize; users, posts, and comments with full relationships and JOINs
 - **Product Catalog** — MongoDB + Mongoose; products with categories (embedded) and reviews (referenced)
+- **URL Shortener** — PostgreSQL; links table with click tracking and indexes
 
 ### 🔴 Advanced
-- **E-Commerce Backend** — PostgreSQL; users, products, orders, order_items with full normalization and JOINs
-- **Social Feed** — MongoDB; users follow other users (many-to-many), posts, likes, comments
+- **E-Commerce Backend** — PostgreSQL; users, products, orders, order_items with full normalization, transactions, and migrations
+- **Social Feed** — MongoDB; users follow others (many-to-many), posts, likes, comments with pagination
+- **Multi-tenant SaaS** — PostgreSQL; organizations, members, roles, permissions with row-level security
 
 ---
 
@@ -1106,66 +1800,29 @@ email            title              body
 |---------|---------|---------|
 | PostgreSQL driver | `pg` | `npm install pg` |
 | PostgreSQL ORM | `sequelize` | `npm install sequelize pg pg-hstore` |
+| Sequelize CLI (migrations) | `sequelize-cli` | `npm install --save-dev sequelize-cli` |
+| Modern ORM (TypeScript-friendly) | `prisma` | `npm install prisma @prisma/client` |
 | MongoDB ODM | `mongoose` | `npm install mongoose` |
-| Environment vars | `dotenv` | `npm install dotenv` |
+| Environment variables | `dotenv` | `npm install dotenv` |
+| Input validation | `express-validator` | `npm install express-validator` |
 | PostgreSQL GUI | pgAdmin | [pgadmin.org](https://www.pgadmin.org) |
 | MongoDB GUI | MongoDB Compass | [mongodb.com/compass](https://www.mongodb.com/products/compass) |
+| DB diagram tool | dbdiagram.io | [dbdiagram.io](https://dbdiagram.io) |
 
 ---
 
 ## 🧠 Key Takeaways
 
-- Use **PostgreSQL** for structured, relational data. Use **MongoDB** for flexible, document-based data.
-- Always use **environment variables** for database credentials — never hardcode them.
-- **ORM/ODM** (Sequelize / Mongoose) lets you work with DB records as JS objects instead of writing raw queries.
-- Design your database **before** writing code — sketch out tables/collections and their relationships.
-- Add **indexes** on columns you search by frequently to keep queries fast.
-- **Normalize** your SQL data to avoid duplication; in MongoDB, decide between **embedding** vs **referencing** based on how you access the data.
+- Use **PostgreSQL** for structured, relational, transactional data. Use **MongoDB** for flexible, document-based, or rapidly changing data.
+- Always use **environment variables** for credentials — never hardcode passwords in your code.
+- **ORM/ODM** (Sequelize / Mongoose / Prisma) lets you work with DB records as JavaScript objects — cleaner, safer, and faster to write than raw queries.
+- Always use **parameterized queries** with raw SQL to prevent SQL Injection attacks.
+- Design your database **before** writing code — sketch the ERD first.
+- **Normalize** SQL data to remove duplication. In MongoDB, decide between **embedding** vs **referencing** based on how you access the data.
+- Add **indexes** on columns you search or filter by frequently — they make queries dramatically faster.
+- Use **migrations** to version-control your database schema changes.
+- Use **transactions** when multiple database operations must all succeed or all fail together.
 
 ---
 
 *Happy coding! 🚀 If you have questions on any section, open an issue or discussion.*
-
-
-MongoDB vs. PostgreSQL: Which to Choose for Your Database Solutions
-
-The Database Dilemma: MongoDB vs. Postgres®
-The importance of selecting the best database for your organization
-When choosing a database for your project, one of the biggest decisions is whether to use MongoDB or PostgreSQL. Both are powerful and widely used, but they cater to different needs. MongoDB is a NoSQL database known for its flexibility and scalability, while PostgreSQL is a relational database offering robust ACID compliance and advanced querying capabilities. In this guide, we’ll break down the key differences between MongoDB and PostgreSQL, helping you determine which database best fits your requirements.
-
-What is MongoDB?
-Developed in 2009, MongoDB is a NoSQL document-oriented database designed to accommodate large volumes of unstructured data. Its primary use cases include applications that require high scalability and flexibility, such as content management systems, mobile applications, and real-time analytics, where data structures might change frequently and rapidly.
-
-MongoDB follows a mixed licensing structure – part open source, part proprietary – which may require additional expenses for organizations needing the advanced features and support available in its proprietary versions. ​
-
-What is PostgreSQL?
-Conversely, PostgreSQL, founded in 1986 as a relational database, is renowned for its robustness; atomicity, consistency, isolation, and durability (ACID) compliance; and support for complex queries. It excels in scenarios where data integrity and structured relationships are key, making it an ideal choice for applications in finance, enterprise content management, and any environment that demands rigorous transactional support.
-
-​The open source nature of PostgreSQL and absence of licensing fees enables businesses to innovate freely and fosters a collaborative development atmosphere. A diverse group of developers can contribute enhancements and share improvements.
-
-As these databases cater to different data models and operational requirements, understanding their origins and typical applications is pivotal in order for organizations to make a decision.
-
-MongoDB vs PostgreSQL at a Glance
-
-Feature	MongoDB	PostgreSQL
-Database Type	NoSQL (Document-based)	SQL (Relational)
-Schema	Schema-less (Flexible)	Fixed Schema (Structured)
-Performance	Fast for unstructured data & readsFast for unstructured data & reads	Optimized for complex reads & writes for structured / relational data
-Horizontal Scalability	Horizontally scalable (sharding)	Horizontally scalable (replication)
-Use Cases	Real-time apps, big data, IoT	Banking systems, Government, Manufacturing, and other industries with transactional data requirements 
-Query Language	MongoDB Query Language (MQL)	SQL (Structured Query Language)
-
-Data Models: Document-Based vs. Relational
-The core differences between how MongoDB and PostgreSQL handle data
-MongoDB and PostgreSQL differ greatly in their data models: MongoDB is document-based, while PostgreSQL uses a traditional relational model.​
-
-In MongoDB, data is stored in flexible, JSON-like documents, allowing for a schema-less design in which different documents in the same collection can have varying structures. This flexibility makes MongoDB advantageous for applications that experience frequent changes in requirements, such as agile development environments or those dealing with large amounts of unstructured data.
-
-In contrast, PostgreSQL organizes data into structured tables with defined schemas, adhering to strict ACID compliance that ensures data integrity and reliability. This structure supports advanced querying capabilities and encourages complex relationships between data entities through foreign keys and joins. This makes PostgreSQL a preferred choice for applications that require robust data integrity and consistency, such as financial systems or enterprise resource planning.
-
-MongoDB’s document-based approach offers significant advantages, including scalability and speed when dealing with large datasets, plus ease of horizontal scaling across distributed systems. However, this model can lead to challenges in relationships between data as well as potential redundancies.
-
-On the other hand, while PostgreSQL’s relational model excels in ensuring data integrity and supporting complex queries, it can be less adaptable to rapidly changing data requirements.
-
-Notable users of MongoDB include major players such as eBay, Uber, and Lyft, which rely on its capabilities to handle massive volumes of data while providing fast read and write operations. Organizations including Apple, Skype, and Instagram utilize PostgreSQL to ensure that their backend databases maintain consistency and reliability during transactions.
-
